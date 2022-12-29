@@ -1,0 +1,74 @@
+scripts:
+  barrels:
+    script: barrelsby --config .barrelsby.json
+    hiddenFromHelp: true
+
+  build:
+    script: nps clean barrels compile
+    description: Build project
+
+  clean:
+    script: rm -rf dist
+    hiddenFromHelp: true
+
+  compile:
+    script: tsc -p tsconfig.compile.json
+    hiddenFromHelp: true
+
+  fix:
+    default:
+      script: nps lint.fix format.fix
+      hiddenFromHelp: Fix linting and formatting errors
+
+  format:
+    default:
+      script: nps 'test.once --selectProjects prettier --coverage false'
+      description: Check for format errors
+    fix:
+      script: prettier --write .
+      hiddenFromHelp: true
+
+  lint:
+    default:
+      script: nps 'test.once --selectProjects lint --coverage false'
+      description: Check for lint errors
+    fix:
+      script: eslint . --ext .ts --fix
+      hiddenFromHelp: true
+
+  precommit:
+    script: tsc && nps barrels && lint-staged
+    hiddenFromHelp: true
+
+  start:
+    default:
+      script: nps build start.prod
+      description: Start in production mode
+    dev:
+      script: tsnd --cls --exit-child --ignore-watch node_modules --quiet  --respawn --rs --transpile-only -r tsconfig-paths/register src
+      description: Start in dev mode
+    prod:
+      script: NODE_ENV=production node -r module-alias/register dist
+      hiddenFromHelp: true
+
+  test:
+    default:
+      script: nps 'test.once --watch --coverage=false'
+      description: Run tests (watch, no coverage)
+    ci:
+      script: jest --config test/jest.config.ts --selectProjects unit --silent --reporters=jest-silent-reporter
+      hiddenFromHelp: true
+    debug:
+      script: node --inspect-brk ./node_modules/jest/bin/jest --runInBand --watch --config test/jest.unit.ts
+      description: Start tests in debug mode (open in chrome://inspect)
+    once:
+      script: jest --config test/jest.config.ts
+      description: Run tests (once, coverage)
+
+  validate:
+    default:
+      script: concurrently tsc 'nps test.once'
+      description: Perform static analysis testing (lint, format...)
+    ci:
+      script: concurrently tsc 'jest --config test/jest.config.ts --selectProjects prettier lint --silent --reporters=jest-silent-reporter --coverage false'
+      hiddenFromHelp: true
