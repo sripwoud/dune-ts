@@ -1,0 +1,4 @@
+'*.+(js|jsx|ts|tsx)':
+  - eslint --fix .
+'*.+(js|json|jsx|ts|tsx|yaml|yml)':
+  - prettier --write .
