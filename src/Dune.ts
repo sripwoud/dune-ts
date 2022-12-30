@@ -4,7 +4,7 @@ import FormDataAddon from 'wretch/addons/formData'
 
 import { config } from './config'
 import { HEADERS, URLS } from './constants'
-import { maybeGetCsrfToken } from './decorators/maybe-get-csrf-token'
+import { maybeGetCsrfToken } from './decorators'
 
 export class Dune {
   private readonly password: string
