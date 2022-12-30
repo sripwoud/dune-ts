@@ -1,25 +1,25 @@
 const Rgx = (name: string) => new RegExp(`(?<=${name}=)(.*?)(?=;|$)`, 'g')
 
 export const extractCookie = ({
-  cookiesStr,
+  cookies,
   name,
 }: {
   name: string
-  cookiesStr: string
+  cookies: string
 }) => {
-  const match = cookiesStr.match(Rgx(name))
+  const match = cookies.match(Rgx(name))
   if (match === null) throw new Error(`Could not find cookie ${name}`)
   return { [name]: match[0] }
 }
 
 export const extractCookies = ({
-  cookiesStr,
+  cookies,
   names,
 }: {
   names: string[]
-  cookiesStr: string
+  cookies: string
 }) =>
   names.reduce<Record<string, string>>(
-    (cookies, name) => ({ ...cookies, ...extractCookie({ cookiesStr, name }) }),
+    (_cookies, name) => ({ ..._cookies, ...extractCookie({ cookies, name }) }),
     {},
   )

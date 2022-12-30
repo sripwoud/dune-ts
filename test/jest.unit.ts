@@ -23,7 +23,11 @@ const jestUnitConfig: JestConfigWithTsJest = {
     prefix: '<rootDir>/',
   }),
   preset: 'ts-jest',
-  setupFilesAfterEnv: ['jest-chain', '<rootDir>/test/setup.ts'],
+  setupFilesAfterEnv: [
+    'jest-chain',
+    'jest-extended/all',
+    '<rootDir>/test/setup.ts',
+  ],
 }
 
 export default jestUnitConfig

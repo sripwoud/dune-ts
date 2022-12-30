@@ -10,7 +10,7 @@ export const maybeGetCsrfToken = (
   descriptor.value = async function () {
     if ((this as Dune).cookies.csrf === undefined)
       await (this as Dune)['getCsrfToken']()
-    return originalMethod
+    return originalMethod.apply(this)
   }
 
   return descriptor

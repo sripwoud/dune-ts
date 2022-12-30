@@ -1,4 +1,4 @@
-const BASE_URL = 'https://dune.xyz'
+const BASE_URL = 'https://dune.com'
 
 export const HEADERS = {
   dnt: '1',

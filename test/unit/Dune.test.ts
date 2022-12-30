@@ -12,13 +12,13 @@ describe('Dune', () => {
   it('getAuthToken', async () => {
     jest.setTimeout(10000)
     const dune = new Dune()
-    try {
-      await dune['getAuthToken']()
-    } catch (e) {
-      console.error(e)
-    }
-    console.log(dune.cookies)
-    expect(dune.cookies).toBeDefined()
+
+    await dune['auth']()
+    ;['csrf', 'auth-id-token', 'auth-refresh', 'auth-user'].forEach(
+      (cookie) => {
+        expect(dune.cookies[cookie]).toBeDefined().toBeString().not.toBeEmpty()
+      },
+    )
   })
 
   it.todo('maybeGetCsrfToken')
