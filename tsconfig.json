@@ -21,7 +21,7 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "strictPropertyInitialization": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "importHelpers": true,

@@ -37,7 +37,8 @@ scripts:
       hiddenFromHelp: true
 
   precommit:
-    script: tsc && nps barrels && lint-staged
+    script: tsc && lint-staged
+    #    script: tsc && nps barrels && lint-staged
     hiddenFromHelp: true
 
   start:
