@@ -10,3 +10,4 @@ coverage
 .idea
 
 .env
+.config.yaml

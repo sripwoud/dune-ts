@@ -1,7 +1,5 @@
 import type { JestConfigWithTsJest } from 'ts-jest'
 
-import { pathsToModuleNameMapper } from 'ts-jest'
-import { compilerOptions } from '../tsconfig.json'
 import common from './jest.common'
 
 const jestUnitConfig: JestConfigWithTsJest = {
@@ -17,13 +15,14 @@ const jestUnitConfig: JestConfigWithTsJest = {
     },
   },
   displayName: 'unit',
-  moduleDirectories: ['node_modules', __dirname],
+  moduleDirectories: ['node_modules', '<rootDir>'],
   moduleFileExtensions: ['ts', 'js', 'json'],
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
-    prefix: '<rootDir>/',
-  }),
   preset: 'ts-jest',
-  setupFilesAfterEnv: ['jest-chain', './test/setup.ts'],
+  setupFilesAfterEnv: [
+    'jest-chain',
+    'jest-extended/all',
+    '<rootDir>/test/setup.ts',
+  ],
 }
 
 export default jestUnitConfig

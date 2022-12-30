@@ -1,1 +1,3 @@
 extends: ['@r1oga']
+rules:
+  '@typescript-eslint/dot-notation': off

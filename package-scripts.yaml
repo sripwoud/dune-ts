@@ -37,19 +37,9 @@ scripts:
       hiddenFromHelp: true
 
   precommit:
-    script: tsc && nps barrels && lint-staged
+    script: tsc && lint-staged
+    #    script: tsc && nps barrels && lint-staged
     hiddenFromHelp: true
-
-  start:
-    default:
-      script: nps build start.prod
-      description: Start in production mode
-    dev:
-      script: tsnd --cls --exit-child --ignore-watch node_modules --quiet  --respawn --rs --transpile-only -r tsconfig-paths/register src
-      description: Start in dev mode
-    prod:
-      script: NODE_ENV=production node -r module-alias/register dist
-      hiddenFromHelp: true
 
   test:
     default:
