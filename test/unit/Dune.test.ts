@@ -5,8 +5,7 @@ describe('Dune', () => {
     const dune = new Dune()
     // using array notation to access private methods
     await dune['getCsrfToken']()
-    console.log(dune.cookies)
-    expect(dune.cookies).toBeDefined()
+    expect(dune.cookies.csrf).toBeDefined().toBeString().not.toBeEmpty()
   })
 
   it('getAuthToken', async () => {

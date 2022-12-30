@@ -1,6 +1,3 @@
-import wretch from 'wretch'
-import FormUrlAddon from 'wretch/addons/formUrl'
-
 import { config } from './config'
 import { HEADERS, URLS } from './constants'
 import { maybeGetCsrfToken } from './decorators'
@@ -31,19 +28,8 @@ export class Dune {
     this.username = username
   }
 
-  get http() {
-    return wretch()
-      .addon(FormUrlAddon)
-      .headers({
-        ...HEADERS,
-        cookie: Object.entries(this.cookies)
-          .map(([key, value]) => `${key}=${value}`)
-          .join(';'),
-      })
-  }
-
   private async getCsrfToken() {
-    const response = await this.http.url(URLS.CSRF).post().res()
+    const response = await fetch(URLS.CSRF, { method: 'POST' })
     const cookies = response.headers.get('set-cookie')
     if (cookies === null) throw new Error('Could not fetch csrf token')
     this.cookies = extractCookie({ cookies, name: 'csrf' })
