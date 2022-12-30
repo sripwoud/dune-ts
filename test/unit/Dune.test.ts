@@ -2,10 +2,16 @@ import { Dune } from 'src'
 import { COOKIES } from './fixtures'
 import { voidFn } from './utils'
 
+let dune: Dune
+
+beforeEach(() => {
+  dune = new Dune()
+})
+
 describe('Dune', () => {
   describe('constructor', () => {
     it('sets password and username', () => {
-      const dune = new Dune({ password: 'foo', username: 'bar' })
+      dune = new Dune({ password: 'foo', username: 'bar' })
 
       expect(dune).toHaveProperty('password', 'foo')
       expect(dune).toHaveProperty('username', 'bar')
@@ -28,7 +34,6 @@ describe('Dune', () => {
     it('sets csrf cookie', async () => {
       const CSRF_TOKEN = '1234'
       fetchMock.once('', { headers: { 'set-cookie': `csrf=${CSRF_TOKEN}` } })
-      const dune = new Dune()
 
       // using array notation to access private methods
       await dune['getCsrfToken']()
@@ -38,7 +43,6 @@ describe('Dune', () => {
 
     it('throws error if csrf token is not found', async () => {
       fetchMock.once('', { headers: {} })
-      const dune = new Dune()
 
       await expect(dune['getCsrfToken']()).rejects.toMatchInlineSnapshot(
         `[Error: Could not fetch csrf token]`,
@@ -59,9 +63,8 @@ describe('Dune', () => {
       jest
         .spyOn(Dune.prototype as any, 'getCsrfToken')
         .mockImplementationOnce(voidFn)
-      const dune = new Dune()
 
-      await dune['auth']()
+      await dune['getAuthCookies']()
 
       expect(Dune.prototype['getCsrfToken']).toHaveBeenCalledOnce()
       Object.entries(COOKIES).forEach(([cookieName, cookieValue]) => {
@@ -74,13 +77,19 @@ describe('Dune', () => {
       jest
         .spyOn(Dune.prototype as any, 'getCsrfToken')
         .mockImplementationOnce(voidFn)
-      const dune = new Dune()
 
-      await expect(dune['auth']()).rejects.toMatchInlineSnapshot(
+      await expect(dune['getAuthCookies']()).rejects.toMatchInlineSnapshot(
         `[Error: Could not fetch auth cookies]`,
       )
     })
   })
 
-  it.todo('maybeGetCsrfToken')
+  it('getAuthToken', async () => {
+    const TOKEN = 'foo'
+    fetchMock.once(JSON.stringify({ token: TOKEN }))
+
+    await dune['getAuthToken']()
+
+    expect(dune).toHaveProperty('token', TOKEN)
+  })
 })
