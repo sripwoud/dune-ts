@@ -7,6 +7,7 @@ export class Dune {
   private readonly password: string
   private readonly username: string
   _cookies: Record<string, string> = {}
+  private token: string | undefined
 
   get cookies() {
     return this._cookies
@@ -36,7 +37,7 @@ export class Dune {
   }
 
   @maybeGetCsrfToken
-  private async auth() {
+  private async getAuthCookies() {
     await fetch(URLS.AUTH, {
       body: new URLSearchParams({
         action: 'login',
@@ -64,32 +65,20 @@ export class Dune {
     })
   }
 
-  // @maybeGetCsrfToken
-  // async login() {
-  //   if (this.cookies.csrf === undefined) await this.getCsrfToken()
-  //   console.log(this.http)
-  //   const req = this.http
-  //     .url(URLS.AUTH)
-  //     .formData({
-  //       action: 'login',
-  //       csrf: this.cookies.csrf,
-  //       next: URLS.BASE,
-  //       password: this.password,
-  //       username: this.username,
-  //     })
-  //     .post()
-  //     .badRequest((err) => {
-  //       throw new Error(err.text)
-  //     })
-  //   console.log({ req })
-  //
-  //   const response = await req.res()
-  //
-  //   const cookies = response.headers.get('set-cookie')
-  //   if (cookies === null) throw new Error('Could not fetch csrf token')
-  //
-  //   this.cookies = { ...this.cookies, ...cookie.parse(cookies) }
-  // }
+  private async getAuthToken() {
+    const response = await fetch(URLS.SESSION, {
+      headers: {
+        ...HEADERS,
+        cookie: Object.entries(this.cookies)
+          .map(([key, value]) => `${key}=${value}`)
+          .join(';'),
+      },
+      method: 'POST',
+    })
+
+    const { token } = await response.json()
+    this.token = token
+  }
 }
 
 export const dune = new Dune()
