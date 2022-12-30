@@ -1,4 +1,4 @@
-import { extractCookie } from '../../src/utils'
+import { extractCookie, extractCookies } from '../../src/utils'
 
 describe('extractCookie', () => {
   const COOKIES = {
@@ -18,4 +18,13 @@ describe('extractCookie', () => {
       )
     },
   )
+
+  it('should extract several cookies', () => {
+    expect(
+      extractCookies({
+        cookiesStr: COOKIES_STR,
+        names: Object.keys(COOKIES),
+      }),
+    ).toEqual(COOKIES)
+  })
 })

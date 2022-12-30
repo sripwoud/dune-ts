@@ -11,3 +11,15 @@ export const extractCookie = ({
   if (match === null) throw new Error(`Could not find cookie ${name}`)
   return match[0]
 }
+
+export const extractCookies = ({
+  cookiesStr,
+  names,
+}: {
+  names: string[]
+  cookiesStr: string
+}) =>
+  names.reduce<Record<string, string>>((cookies, name) => {
+    cookies[name] = extractCookie({ cookiesStr, name })
+    return cookies
+  }, {})
