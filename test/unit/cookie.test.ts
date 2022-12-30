@@ -13,9 +13,9 @@ describe('extractCookie', () => {
   it.each(Object.entries(COOKIES))(
     'should extract cookie %s',
     (cookieName, cookieValue) => {
-      expect(extractCookie({ cookiesStr: COOKIES_STR, name: cookieName })).toBe(
-        cookieValue,
-      )
+      expect(
+        extractCookie({ cookiesStr: COOKIES_STR, name: cookieName }),
+      ).toEqual({ [cookieName]: cookieValue })
     },
   )
 

@@ -9,7 +9,7 @@ export const extractCookie = ({
 }) => {
   const match = cookiesStr.match(Rgx(name))
   if (match === null) throw new Error(`Could not find cookie ${name}`)
-  return match[0]
+  return { [name]: match[0] }
 }
 
 export const extractCookies = ({
@@ -19,7 +19,7 @@ export const extractCookies = ({
   names: string[]
   cookiesStr: string
 }) =>
-  names.reduce<Record<string, string>>((cookies, name) => {
-    cookies[name] = extractCookie({ cookiesStr, name })
-    return cookies
-  }, {})
+  names.reduce<Record<string, string>>(
+    (cookies, name) => ({ ...cookies, ...extractCookie({ cookiesStr, name }) }),
+    {},
+  )
