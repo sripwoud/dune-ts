@@ -1,6 +1,0 @@
-{
-  "directory": ["src/decorators"],
-  "delete": true,
-  "noSemicolon": true,
-  "singleQuotes": true
-}

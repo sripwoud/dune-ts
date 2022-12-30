@@ -57,8 +57,7 @@ export class Dune {
     })
       .then((r) => {
         const cookies = r.headers.get('set-cookie')
-        console.log(cookies)
-        //
+
         if (cookies !== null) {
           this.cookies = extractCookies({
             cookies,
