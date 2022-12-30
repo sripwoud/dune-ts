@@ -1,15 +1,26 @@
 {
-  "name": "ts-template",
+  "name": "@r1oga/dune-ts",
   "version": "1.0.0",
-  "description": "",
+  "description": "Unofficial Dune Analytics Typescript Client",
   "main": "index.js",
+  "repository": "git@github.com:r1oga/dune-ts.git",
+  "homepage": "https://github.com/r1oga/dune-ts",
+  "keywords": [
+    "dune",
+    "analytics",
+    "javascript",
+    "typescript",
+    "client",
+    "ethereum",
+    "data"
+  ],
   "scripts": {
     "nps": "nps",
     "prepare": "husky install",
     "setup": "pnpm 2> /dev/null || npm i -g pnpm && pnpm i"
   },
   "author": "r1oga",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@r1oga/eslint-config": "^1.1.6",
     "@r1oga/prettier-config": "^1.1.8",
