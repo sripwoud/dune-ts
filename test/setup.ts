@@ -1,8 +1,4 @@
 import 'reflect-metadata'
+import { enableFetchMocks } from 'jest-fetch-mock'
 
-// import { server } from './mocks/server'
-//
-// console.log(server)
-// beforeAll(() => server.listen())
-// afterEach(() => server.resetHandlers())
-// afterAll(() => server.close())
+enableFetchMocks()

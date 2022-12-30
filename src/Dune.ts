@@ -54,18 +54,14 @@ export class Dune {
       },
       method: 'POST',
       redirect: 'manual',
-    })
-      .then((r) => {
-        const cookies = r.headers.get('set-cookie')
-
-        if (cookies !== null) {
-          this.cookies = extractCookies({
-            cookies,
-            names: ['auth-id', 'auth-id-token', 'auth-refresh', 'auth-user'],
-          })
-        }
+    }).then((r) => {
+      const cookies = r.headers.get('set-cookie')
+      if (cookies === null) throw new Error('Could not fetch auth cookies')
+      this.cookies = extractCookies({
+        cookies,
+        names: ['auth-id', 'auth-id-token', 'auth-refresh', 'auth-user'],
       })
-      .catch((e) => console.error(e))
+    })
   }
 
   // @maybeGetCsrfToken
