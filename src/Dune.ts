@@ -1,7 +1,6 @@
 import { config } from './config'
 import { HEADERS, URLS } from './constants'
 import { Cookies } from './Cookies'
-import { maybeGetCsrfToken } from './decorators'
 
 export class Dune {
   private readonly password: string
@@ -27,7 +26,6 @@ export class Dune {
     this.cookies.parse(response)
   }
 
-  @maybeGetCsrfToken
   private async getAuthCookies() {
     await fetch(URLS.AUTH, {
       body: new URLSearchParams({
@@ -60,6 +58,12 @@ export class Dune {
 
     const { token } = await response.json()
     this.token = token
+  }
+
+  public async login() {
+    await this.getCsrfToken()
+    await this.getAuthCookies()
+    await this.getAuthToken()
   }
 }
 
