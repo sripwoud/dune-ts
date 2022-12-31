@@ -38,14 +38,14 @@ describe('Dune', () => {
       // using array notation to access private methods
       await dune['getCsrfToken']()
 
-      expect(dune.cookies.csrf).toEqual(CSRF_TOKEN)
+      expect(dune.csrf).toEqual(CSRF_TOKEN)
     })
 
     it('throws error if csrf token is not found', async () => {
       fetchMock.once('', { headers: {} })
 
       await expect(dune['getCsrfToken']()).rejects.toMatchInlineSnapshot(
-        `[Error: Could not fetch csrf token]`,
+        `[Error: No cookies found on response]`,
       )
     })
   })
@@ -68,7 +68,7 @@ describe('Dune', () => {
 
       expect(Dune.prototype['getCsrfToken']).toHaveBeenCalledOnce()
       Object.entries(COOKIES).forEach(([cookieName, cookieValue]) => {
-        expect(dune.cookies[cookieName]).toEqual(cookieValue)
+        expect(dune['cookies'].getCookie(cookieName)).toEqual(cookieValue)
       })
     })
 
@@ -79,7 +79,7 @@ describe('Dune', () => {
         .mockImplementationOnce(voidFn)
 
       await expect(dune['getAuthCookies']()).rejects.toMatchInlineSnapshot(
-        `[Error: Could not fetch auth cookies]`,
+        `[Error: No cookies found on response]`,
       )
     })
   })
