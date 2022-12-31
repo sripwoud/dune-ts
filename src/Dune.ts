@@ -1,24 +1,16 @@
 import { config } from './config'
 import { HEADERS, URLS } from './constants'
+import { Cookies } from './Cookies'
 import { maybeGetCsrfToken } from './decorators'
-import { extractCookie, extractCookies } from './utils'
 
 export class Dune {
   private readonly password: string
   private readonly username: string
-  _cookies: Record<string, string> = {}
+  private readonly cookies: Cookies
   private token: string | undefined
 
-  get cookies() {
-    return this._cookies
-  }
-
-  set cookies(cookies: Record<string, string>) {
-    this._cookies = { ...this._cookies, ...cookies }
-  }
-
   get csrf() {
-    return this.cookies.csrf
+    return this.cookies.getCookie('csrf')
   }
 
   constructor({ password, username } = config) {
@@ -27,13 +19,12 @@ export class Dune {
 
     this.password = password
     this.username = username
+    this.cookies = new Cookies()
   }
 
   private async getCsrfToken() {
     const response = await fetch(URLS.CSRF, { method: 'POST' })
-    const cookies = response.headers.get('set-cookie')
-    if (cookies === null) throw new Error('Could not fetch csrf token')
-    this.cookies = extractCookie({ cookies, name: 'csrf' })
+    this.cookies.parse(response)
   }
 
   @maybeGetCsrfToken
@@ -49,19 +40,12 @@ export class Dune {
       headers: {
         ...HEADERS,
         'Content-Type': 'application/x-www-form-urlencoded',
-        cookie: Object.entries(this.cookies)
-          .map(([key, value]) => `${key}=${value}`)
-          .join(';'),
+        cookie: this.cookies.serialize(),
       },
       method: 'POST',
       redirect: 'manual',
-    }).then((r) => {
-      const cookies = r.headers.get('set-cookie')
-      if (cookies === null) throw new Error('Could not fetch auth cookies')
-      this.cookies = extractCookies({
-        cookies,
-        names: ['auth-id', 'auth-id-token', 'auth-refresh', 'auth-user'],
-      })
+    }).then((res) => {
+      this.cookies.parse(res)
     })
   }
 
@@ -69,11 +53,9 @@ export class Dune {
     const response = await fetch(URLS.SESSION, {
       headers: {
         ...HEADERS,
-        cookie: Object.entries(this.cookies)
-          .map(([key, value]) => `${key}=${value}`)
-          .join(';'),
+        cookie: this.cookies.serialize(),
+        method: 'POST',
       },
-      method: 'POST',
     })
 
     const { token } = await response.json()
