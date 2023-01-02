@@ -44,7 +44,7 @@ scripts:
   test:
     default:
       script: nps 'test.once --watch --coverage=false'
-      description: Run tests (watch, no coverage)
+      description: Run all tests (watch, no coverage)
     ci:
       script: jest --config test/jest.config.ts --selectProjects unit integration --silent --reporters=jest-silent-reporter
       hiddenFromHelp: true
@@ -53,17 +53,17 @@ scripts:
       description: Start tests in debug mode (open in chrome://inspect)
     integration:
       script: jest --config test/jest.config.ts --selectProjects integration --watch --coverage=false
-      hiddenFromHelp: true
+      description: Run only integration tests (watch, no coverage)
     once:
       script: jest --config test/jest.config.ts
       description: Run tests (once, coverage)
     unit:
       script: jest --config test/jest.config.ts --selectProjects unit --watch --coverage=false
-      hiddenFromHelp: true
+      description: Run only unit tests (watch, no coverage)
 
   query:
     script: tsnd --cls --transpile-only example
-    hiddenFromHelp: true
+    description: Fetch query results (-q <query-id> -u <username> -p <password>)
 
   validate:
     default:

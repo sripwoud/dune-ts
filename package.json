@@ -1,5 +1,5 @@
 {
-  "name": "@r1oga/dune-ts",
+  "name": "dune-ts",
   "version": "1.0.0",
   "description": "Unofficial Dune Analytics Typescript Client",
   "main": "index.js",
