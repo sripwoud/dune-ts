@@ -14,14 +14,15 @@ export const URLS = {
   AUTH: `${BASE_URL}/api/auth`,
   BASE: BASE_URL,
   CSRF: `${BASE_URL}/api/auth/csrf`,
-  GRAPH: 'https://core-hsr.dune.com/v1/graphql',
+  GRAPH_EXEC_ID: 'https://core-hsr.dune.com/v1/graphql',
+  GRAPH_QUERY: 'https://app-api.dune.com/v1/graphql',
   LOGIN: `${BASE_URL}/auth/login`,
   SESSION: `${BASE_URL}/api/auth/session`,
 }
 
 export const COOKIES_RGX = /(csrf|auth(-\w+)+)=([\w-.]+)/g
 
-const GETRESULT_GQL = `query GetResult($query_id: Int!, $parameters: [Parameter!]!) {
+const GET_RESULT_GQL = `query GetResult($query_id: Int!, $parameters: [Parameter!]!) {
     get_result_v3(query_id: $query_id, parameters: $parameters) {
         job_id
         result_id
@@ -29,8 +30,14 @@ const GETRESULT_GQL = `query GetResult($query_id: Int!, $parameters: [Parameter!
         __typename
     }
 }`
-
-export const QUERY_DATA = {
+export const GET_EXECUTION_ID_DATA = {
   operationName: 'GetResult',
-  query: GETRESULT_GQL,
+  query: GET_RESULT_GQL,
+}
+
+const GET_EXECUTION_GQL =
+  'query GetExecution($execution_id: String!, $query_id: Int!, $parameters: [Parameter!]!) {\n  get_execution(\n    execution_id: $execution_id\n    query_id: $query_id\n    parameters: $parameters\n  ) {\n    execution_queued {\n      execution_id\n      execution_user_id\n      position\n      execution_type\n      created_at\n      __typename\n    }\n    execution_running {\n      execution_id\n      execution_user_id\n      execution_type\n      started_at\n      created_at\n      __typename\n    }\n    execution_succeeded {\n      execution_id\n      runtime_seconds\n      generated_at\n      columns\n      data\n      __typename\n    }\n    execution_failed {\n      execution_id\n      type\n      message\n      metadata {\n        line\n        column\n        hint\n        __typename\n      }\n      runtime_seconds\n      generated_at\n      __typename\n    }\n    __typename\n  }\n}\n'
+export const QUERY_DATA = {
+  operationName: 'GetExecution',
+  query: GET_EXECUTION_GQL,
 }
