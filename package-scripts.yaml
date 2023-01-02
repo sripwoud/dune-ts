@@ -46,7 +46,7 @@ scripts:
       script: nps 'test.once --watch --coverage=false'
       description: Run tests (watch, no coverage)
     ci:
-      script: jest --config test/jest.config.ts --selectProjects unit --silent --reporters=jest-silent-reporter
+      script: jest --config test/jest.config.ts --selectProjects unit integration --silent --reporters=jest-silent-reporter
       hiddenFromHelp: true
     debug:
       script: node --inspect-brk ./node_modules/jest/bin/jest --runInBand --watch --config test/jest.unit.ts
