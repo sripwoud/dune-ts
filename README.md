@@ -17,7 +17,7 @@ This library aims to provide an alternative way to integrate Dune Analytics into
 
 ## Features
 
-- [ ] Authentication with password and username.
+- [x] Authentication with password and username.
 - [ ] Fetch results from Dune Analytics queries.
 
 ## Installation
@@ -33,4 +33,4 @@ See [`.config.example.yaml`](.config.yaml) for an example.
 
 ## Credits
 
-Based on https://github.com/0xkeivin/duneapi
+Based on [itzmestar/duneanalytics](https://github.com/itzmestar/duneanalytics)
