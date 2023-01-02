@@ -5,7 +5,7 @@ import { Cookies } from './Cookies'
 export class Dune {
   private readonly password: string
   private readonly username: string
-  private cookies: Cookies | undefined
+  private readonly cookies: Cookies
   private csrf: string | undefined
   private token: string | undefined
 
@@ -15,17 +15,18 @@ export class Dune {
 
     this.password = password
     this.username = username
+    this.cookies = new Cookies()
   }
 
   private async getCsrfToken() {
     const response = await fetch(URLS.CSRF, { method: 'POST' })
+
     this.csrf = (await response.json()).csrf
-    this.cookies = new Cookies(response)
+    this.cookies.set(response)
   }
 
   private async getAuthCookies() {
     if (this.csrf === undefined) throw new Error('CSRF token is not defined')
-    if (this.cookies === undefined) throw new Error('cookies are not defined')
 
     await fetch(URLS.AUTH, {
       body: new URLSearchParams({
@@ -38,12 +39,12 @@ export class Dune {
       headers: {
         ...HEADERS,
         'Content-Type': 'application/x-www-form-urlencoded',
-        cookie: this.cookies.toString(),
+        cookie: `csrf=${this.csrf}`,
       },
       method: 'POST',
       redirect: 'manual',
     }).then((res) => {
-      this.cookies = new Cookies(res)
+      this.cookies.set(res)
     })
   }
 
@@ -51,6 +52,7 @@ export class Dune {
     if (this.cookies === undefined) throw new Error('cookies are not defined')
 
     const response = await fetch(URLS.SESSION, {
+      body: 'false',
       headers: {
         ...HEADERS,
         'Content-Type': 'application/json',
@@ -59,8 +61,8 @@ export class Dune {
       method: 'POST',
     })
 
-    const { token } = await response.json()
-    this.token = token
+    const res = await response.json()
+    this.token = res.token
   }
 
   public async login() {

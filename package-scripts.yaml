@@ -51,6 +51,9 @@ scripts:
     debug:
       script: node --inspect-brk ./node_modules/jest/bin/jest --runInBand --watch --config test/jest.unit.ts
       description: Start tests in debug mode (open in chrome://inspect)
+    integration:
+      script: jest --config test/jest.config.ts --selectProjects integration  --coverage=false --watch
+      hiddenFromHelp: true
     once:
       script: jest --config test/jest.config.ts
       description: Run tests (once, coverage)
