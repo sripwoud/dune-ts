@@ -18,3 +18,5 @@ export const URLS = {
   LOGIN: `${BASE_URL}/auth/login`,
   SESSION: `${BASE_URL}/api/auth/session`,
 }
+
+export const COOKIES_RGX = /(csrf|auth(-\w+)+)=([\w-.]+)/g
