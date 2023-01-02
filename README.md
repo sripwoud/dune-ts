@@ -14,13 +14,15 @@ Unofficial Dune Analytics Typescript Client.
 ## Motivation
 
 Dune Analytics is a great tool for querying blockchain data.
-However, it is currently only browser based which is not very developer friendly. An official API is being developed but is only opened in [private beta](https://dune.com/docs/api/).
+However, it is currently only browser based which is not very developer friendly. An official API is being developed but
+is only opened in [private beta](https://dune.com/docs/api/).
 This library aims to provide an alternative way to integrate Dune Analytics into your Typescript projects.
 
 ## Features
 
 - [x] Authentication with password and username.
-- [ ] Fetch results from Dune Analytics queries.
+- [x] Fetch results from Dune Analytics queries without parameters
+- [ ] Fetch results from Dune Analytics queries with parameters
 
 ## Installation
 
@@ -28,10 +30,26 @@ This library aims to provide an alternative way to integrate Dune Analytics into
 pnpm install dune-ts
 ```
 
-## Setup
+### Setup
 
-Fill your credentials in `.config.yaml`.  
+Fill your credentials in `.config.yaml` or define `DUNE_PWD` and `DUNE_USER` environment variables.  
 See [`.config.example.yaml`](.config.yaml) for an example.
+
+## Local Development
+
+Setup: `npm run setup`  
+Check available scripts: `nps`  
+Fetch Query Results: `nps "query -q <query-id> -u <username> -p <password>"`
+
+## [Example](./example/index.ts)
+
+```typescript
+import { Dune } from 'dune-ts'
+
+const dune = new Dune({ password, username })
+await dune.login()
+const { columns, data } = await dune.query(queryId)
+```
 
 ## Credits
 

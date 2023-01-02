@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["test"],
+  "exclude": ["test", "example"],
   "compilerOptions": {
     "noEmit": false,
     "outDir": "dist",

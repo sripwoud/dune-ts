@@ -1,7 +1,7 @@
-import { isCookiesPresent, isCsrfPresent, isTokenPresent } from 'src/decorators'
 import { config } from './config'
 import { GET_EXECUTION_ID_DATA, HEADERS, QUERY_DATA, URLS } from './constants'
 import { Cookies } from './Cookies'
+import { isCookiesPresent, isCsrfPresent, isTokenPresent } from './decorators'
 
 export class Dune {
   private readonly password: string
