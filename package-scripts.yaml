@@ -57,6 +57,9 @@ scripts:
     once:
       script: jest --config test/jest.config.ts
       description: Run tests (once, coverage)
+    unit:
+      script: jest --config test/jest.config.ts --selectProjects unit --watch --coverage=false
+      hiddenFromHelp: true
 
   validate:
     default:

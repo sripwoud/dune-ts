@@ -63,8 +63,10 @@ describe('Dune', () => {
     })
 
     it('throws error if csrf prop not set', async () => {
-      await expect(dune['getAuthCookies']()).rejects.toMatchInlineSnapshot(
-        `[Error: CSRF token is not defined]`,
+      await expect(async () =>
+        dune['getAuthCookies'](),
+      ).rejects.toMatchInlineSnapshot(
+        `[Error: \`csrf\` class property is undefined]`,
       )
       expect(fetchMock).not.toHaveBeenCalled()
     })
@@ -74,9 +76,9 @@ describe('Dune', () => {
 
       fetchMock.once('', { headers: {} })
 
-      await expect(dune['getAuthCookies']()).rejects.toMatchInlineSnapshot(
-        `[Error: No cookies found in response]`,
-      )
+      await expect(async () =>
+        dune['getAuthCookies'](),
+      ).rejects.toMatchInlineSnapshot(`[Error: No cookies found in response]`)
     })
   })
 
@@ -128,8 +130,10 @@ describe('Dune', () => {
     })
 
     it('throws error if token is not set', async () => {
-      await expect(dune['getExecutionId'](987)).rejects.toMatchInlineSnapshot(
-        `[Error: Dune token is not defined]`,
+      await expect(async () =>
+        dune['getExecutionId'](987),
+      ).rejects.toMatchInlineSnapshot(
+        `[Error: \`token\` class property is undefined]`,
       )
       expect(fetchMock).not.toHaveBeenCalled()
     })

@@ -1,3 +1,4 @@
+import { isCookiesPresent, isCsrfPresent, isTokenPresent } from 'src/decorators'
 import { config } from './config'
 import { GET_EXECUTION_ID_DATA, HEADERS, QUERY_DATA, URLS } from './constants'
 import { Cookies } from './Cookies'
@@ -26,10 +27,10 @@ export class Dune {
     this.cookies.set(response)
   }
 
+  @isCsrfPresent
   private async getAuthCookies() {
-    if (this.csrf === undefined) throw new Error('CSRF token is not defined')
-
     await fetch(URLS.AUTH, {
+      // @ts-expect-error
       body: new URLSearchParams({
         action: 'login',
         csrf: this.csrf,
@@ -40,6 +41,7 @@ export class Dune {
       headers: {
         ...HEADERS,
         'Content-Type': 'application/x-www-form-urlencoded',
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         cookie: `csrf=${this.csrf}`,
       },
       method: 'POST',
@@ -49,9 +51,8 @@ export class Dune {
     })
   }
 
+  @isCookiesPresent
   private async getAuthToken() {
-    if (this.cookies === undefined) throw new Error('cookies are not defined')
-
     const response = await fetch(URLS.SESSION, {
       body: 'false',
       headers: {
@@ -70,9 +71,8 @@ export class Dune {
     await this.getAuthToken()
   }
 
+  @isTokenPresent
   private async getExecutionId(queryId: number) {
-    if (this.token === undefined) throw new Error('Dune token is not defined')
-
     const res = await fetch(URLS.GRAPH_EXEC_ID, {
       body: JSON.stringify({
         ...GET_EXECUTION_ID_DATA,
@@ -80,6 +80,7 @@ export class Dune {
       }),
       headers: {
         ...HEADERS,
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         authorization: `Bearer ${this.token}`,
         'Content-Type': 'application/json',
       },
