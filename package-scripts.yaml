@@ -61,6 +61,10 @@ scripts:
       script: jest --config test/jest.config.ts --selectProjects unit --watch --coverage=false
       hiddenFromHelp: true
 
+  query:
+    script: tsnd --cls --transpile-only example
+    hiddenFromHelp: true
+
   validate:
     default:
       script: concurrently tsc 'nps test.once'

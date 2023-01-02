@@ -1,4 +1,4 @@
-import { COOKIES_RGX } from 'src/constants'
+import { COOKIES_RGX } from './constants'
 
 export class Cookies {
   private cookies = ''
