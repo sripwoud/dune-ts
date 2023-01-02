@@ -1,13 +1,20 @@
-export class Cookies {
-  private readonly _cookies: string = ''
+import { COOKIES_RGX } from 'src/constants'
 
-  constructor(response: Response) {
+export class Cookies {
+  private cookies = ''
+
+  set(response: Response) {
     const cookies = response.headers.get('set-cookie')
-    if (cookies === null) throw new Error('No cookies found on response')
-    this._cookies = cookies
+    if (cookies === null) throw new Error('No cookies found in response')
+
+    const matches = cookies.match(COOKIES_RGX)
+    if (matches === null)
+      throw new Error('No matching cookies found in response')
+
+    this.cookies = matches.join('; ')
   }
 
   toString() {
-    return this._cookies
+    return this.cookies
   }
 }

@@ -1,6 +1,5 @@
 import { Dune } from 'src'
 import { URLS } from 'src/constants'
-import { Cookies } from 'src/Cookies'
 import { COOKIES_STR, CSRF_COOKIE, CSRF_TOKEN, TOKEN } from './fixtures'
 
 let dune: Dune
@@ -36,14 +35,11 @@ describe('Dune', () => {
       fetchMock.once(JSON.stringify({ csrf: CSRF_TOKEN }), {
         headers: { 'set-cookie': CSRF_COOKIE },
       })
-      dune['cookies'] = new Cookies(
-        new Response('', { headers: { 'set-cookie': '' } }),
-      )
 
       // using array notation to access private methods
       await dune['getCsrfToken']()
 
-      expect(dune['cookies'].toString()).toEqual(CSRF_COOKIE)
+      expect(dune['cookies'].toString()).toMatchInlineSnapshot(`"csrf=1234"`)
       expect(dune).toHaveProperty('csrf', CSRF_TOKEN)
       expect(fetchMock).toHaveBeenCalledOnceWith(URLS.CSRF)
     })
@@ -57,52 +53,35 @@ describe('Dune', () => {
         },
       })
       dune['csrf'] = CSRF_TOKEN
-      dune['cookies'] = new Cookies(
-        new Response('', { headers: { 'set-cookie': '' } }),
-      )
 
       await dune['getAuthCookies']()
 
-      expect(dune['cookies'].toString()).toEqual(COOKIES_STR)
+      expect(dune['cookies'].toString()).toMatchInlineSnapshot(
+        `"csrf=1234; auth-id=some-auth-id; auth-id-token=some-auth-id-token; auth-refresh=some-auth-refresh; auth-user=r1oga"`,
+      )
       expect(fetchMock).toHaveBeenCalledOnceWith(URLS.AUTH)
     })
 
     it('throws error if csrf prop not set', async () => {
-      dune['cookies'] = new Cookies(
-        new Response('', { headers: { 'set-cookie': '' } }),
-      )
       await expect(dune['getAuthCookies']()).rejects.toMatchInlineSnapshot(
         `[Error: CSRF token is not defined]`,
       )
       expect(fetchMock).not.toHaveBeenCalled()
     })
 
-    it('throws error if csrf cookie not set', async () => {
-      dune['csrf'] = CSRF_TOKEN
-      await expect(dune['getAuthCookies']()).rejects.toMatchInlineSnapshot(
-        `[Error: cookies are not defined]`,
-      )
-      expect(fetchMock).not.toHaveBeenCalled()
-    })
-
     it('throws error if auth cookies are not found', async () => {
       dune['csrf'] = CSRF_TOKEN
-      dune['cookies'] = new Cookies(
-        new Response('', { headers: { 'set-cookie': '' } }),
-      )
+
       fetchMock.once('', { headers: {} })
 
       await expect(dune['getAuthCookies']()).rejects.toMatchInlineSnapshot(
-        `[Error: No cookies found on response]`,
+        `[Error: No cookies found in response]`,
       )
     })
   })
 
   describe('getAuthToken', () => {
     it('sets token', async () => {
-      dune['cookies'] = new Cookies(
-        new Response('', { headers: { 'set-cookie': '' } }),
-      )
       fetchMock.once(JSON.stringify({ token: TOKEN }))
 
       await dune['getAuthToken']()
