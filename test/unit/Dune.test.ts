@@ -114,24 +114,56 @@ describe('Dune', () => {
     })
   })
 
-  describe('getQueryResultId', () => {
+  describe('getExecutionId', () => {
     it('gets query result id', async () => {
       fetchMock.once(
         JSON.stringify({ data: { get_result_v3: { result_id: 1234 } } }),
       )
 
       dune['token'] = TOKEN
-      await dune.getQueryResultId(987)
+      await dune['getExecutionId'](987)
 
-      expect(fetchMock).toHaveBeenCalledOnceWith(URLS.GRAPH)
-      expect(dune.queryResultId).toEqual(1234)
+      expect(fetchMock).toHaveBeenCalledOnceWith(URLS.GRAPH_EXEC_ID)
+      expect(dune.executionId).toEqual(1234)
     })
 
     it('throws error if token is not set', async () => {
-      await expect(dune.getQueryResultId(987)).rejects.toMatchInlineSnapshot(
+      await expect(dune['getExecutionId'](987)).rejects.toMatchInlineSnapshot(
         `[Error: Dune token is not defined]`,
       )
       expect(fetchMock).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('query', () => {
+    it('returns query results', async () => {
+      fetchMock
+        .once(JSON.stringify({ data: { get_result_v3: { result_id: 1234 } } }))
+        .once(
+          JSON.stringify({
+            data: {
+              get_execution: {
+                execution_succeeded: { columns: ['COL'], data: ['DATA'] },
+              },
+            },
+          }),
+        )
+      dune['token'] = TOKEN
+
+      await expect(dune.query(1)).resolves.toEqual({
+        columns: ['COL'],
+        data: ['DATA'],
+      })
+      expect(fetchMock).toHaveBeenNthCalledWith(
+        1,
+        URLS.GRAPH_EXEC_ID,
+        expect.any(Object),
+      )
+      expect(fetchMock).toHaveBeenNthCalledWith(
+        2,
+        URLS.GRAPH_QUERY,
+        expect.any(Object),
+      )
     })
   })
 })

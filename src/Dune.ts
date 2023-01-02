@@ -1,5 +1,5 @@
 import { config } from './config'
-import { HEADERS, QUERY_DATA, URLS } from './constants'
+import { GET_EXECUTION_ID_DATA, HEADERS, QUERY_DATA, URLS } from './constants'
 import { Cookies } from './Cookies'
 
 export class Dune {
@@ -8,7 +8,7 @@ export class Dune {
   private readonly cookies: Cookies
   private csrf: string | undefined
   private token: string | undefined
-  public queryResultId: any
+  public executionId: string | undefined
 
   constructor({ password, username } = config) {
     if (password === undefined) throw new Error('Dune password is not defined')
@@ -70,12 +70,12 @@ export class Dune {
     await this.getAuthToken()
   }
 
-  async getQueryResultId(queryId: number) {
+  private async getExecutionId(queryId: number) {
     if (this.token === undefined) throw new Error('Dune token is not defined')
 
-    const res = await fetch(URLS.GRAPH, {
+    const res = await fetch(URLS.GRAPH_EXEC_ID, {
       body: JSON.stringify({
-        ...QUERY_DATA,
+        ...GET_EXECUTION_ID_DATA,
         variables: { parameters: [], query_id: queryId },
       }),
       headers: {
@@ -86,7 +86,32 @@ export class Dune {
       method: 'POST',
     })
 
-    this.queryResultId = (await res.json()).data.get_result_v3.result_id
+    this.executionId = (await res.json()).data.get_result_v3.result_id
+  }
+
+  public async query(queryId: number) {
+    await this.getExecutionId(queryId)
+    const res = await fetch(URLS.GRAPH_QUERY, {
+      body: JSON.stringify({
+        ...QUERY_DATA,
+        variables: {
+          execution_id: this.executionId,
+          parameters: [],
+          query_id: queryId,
+        },
+      }),
+      headers: {
+        ...HEADERS,
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        authorization: `Bearer ${this.token}`,
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+    })
+
+    const { columns, data } = (await res.json()).data.get_execution
+      .execution_succeeded
+    return { columns, data }
   }
 }
 
