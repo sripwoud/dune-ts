@@ -1,5 +1,5 @@
 import { config } from './config'
-import { HEADERS, URLS } from './constants'
+import { HEADERS, QUERY_DATA, URLS } from './constants'
 import { Cookies } from './Cookies'
 
 export class Dune {
@@ -8,6 +8,7 @@ export class Dune {
   private readonly cookies: Cookies
   private csrf: string | undefined
   private token: string | undefined
+  public queryResultId: any
 
   constructor({ password, username } = config) {
     if (password === undefined) throw new Error('Dune password is not defined')
@@ -55,20 +56,37 @@ export class Dune {
       body: 'false',
       headers: {
         ...HEADERS,
-        'Content-Type': 'application/json',
         cookie: this.cookies.toString(),
       },
       method: 'POST',
     })
 
-    const res = await response.json()
-    this.token = res.token
+    this.token = (await response.json()).token
   }
 
   public async login() {
     await this.getCsrfToken()
     await this.getAuthCookies()
     await this.getAuthToken()
+  }
+
+  async getQueryResultId(queryId: number) {
+    if (this.token === undefined) throw new Error('Dune token is not defined')
+
+    const res = await fetch(URLS.GRAPH, {
+      body: JSON.stringify({
+        ...QUERY_DATA,
+        variables: { parameters: [], query_id: queryId },
+      }),
+      headers: {
+        ...HEADERS,
+        authorization: `Bearer ${this.token}`,
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+    })
+
+    this.queryResultId = (await res.json()).data.get_result_v3.result_id
   }
 }
 
