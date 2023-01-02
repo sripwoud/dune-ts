@@ -117,7 +117,7 @@ describe('Dune', () => {
   describe('getQueryResultId', () => {
     it('gets query result id', async () => {
       fetchMock.once(
-        JSON.stringify({ data: { get_result_v2: { result_id: 1234 } } }),
+        JSON.stringify({ data: { get_result_v3: { result_id: 1234 } } }),
       )
 
       dune['token'] = TOKEN
@@ -125,6 +125,13 @@ describe('Dune', () => {
 
       expect(fetchMock).toHaveBeenCalledOnceWith(URLS.GRAPH)
       expect(dune.queryResultId).toEqual(1234)
+    })
+
+    it('throws error if token is not set', async () => {
+      await expect(dune.getQueryResultId(987)).rejects.toMatchInlineSnapshot(
+        `[Error: Dune token is not defined]`,
+      )
+      expect(fetchMock).not.toHaveBeenCalled()
     })
   })
 })
