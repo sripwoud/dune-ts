@@ -30,7 +30,7 @@ export class Dune {
   @isCsrfPresent
   private async getAuthCookies() {
     await fetch(URLS.AUTH, {
-      // @ts-expect-error
+      // @ts-expect-error  - decorator already checks if csrf is defined
       body: new URLSearchParams({
         action: 'login',
         csrf: this.csrf,
