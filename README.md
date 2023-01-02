@@ -17,7 +17,7 @@ This library aims to provide an alternative way to integrate Dune Analytics into
 
 ## Features
 
-- [ ] Authentication with password and username.
+- [x] Authentication with password and username.
 - [ ] Fetch results from Dune Analytics queries.
 
 ## Installation
