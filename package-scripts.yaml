@@ -52,7 +52,7 @@ scripts:
       script: node --inspect-brk ./node_modules/jest/bin/jest --runInBand --watch --config test/jest.unit.ts
       description: Start tests in debug mode (open in chrome://inspect)
     integration:
-      script: jest --config test/jest.config.ts --selectProjects integration  --coverage=false --watch
+      script: jest --config test/jest.config.ts --selectProjects integration --watch --coverage=false
       hiddenFromHelp: true
     once:
       script: jest --config test/jest.config.ts

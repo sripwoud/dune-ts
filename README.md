@@ -33,4 +33,4 @@ See [`.config.example.yaml`](.config.yaml) for an example.
 
 ## Credits
 
-Based on https://github.com/0xkeivin/duneapi
+Based on [itzmestar/duneanalytics](https://github.com/itzmestar/duneanalytics)
