@@ -5,12 +5,9 @@ import { Cookies } from './Cookies'
 export class Dune {
   private readonly password: string
   private readonly username: string
-  private readonly cookies: Cookies
+  private cookies: Cookies | undefined
+  private csrf: string | undefined
   private token: string | undefined
-
-  get csrf() {
-    return this.cookies.getCookie('csrf')
-  }
 
   constructor({ password, username } = config) {
     if (password === undefined) throw new Error('Dune password is not defined')
@@ -18,15 +15,18 @@ export class Dune {
 
     this.password = password
     this.username = username
-    this.cookies = new Cookies()
   }
 
   private async getCsrfToken() {
     const response = await fetch(URLS.CSRF, { method: 'POST' })
-    this.cookies.parse(response)
+    this.csrf = (await response.json()).csrf
+    this.cookies = new Cookies(response)
   }
 
   private async getAuthCookies() {
+    if (this.csrf === undefined) throw new Error('CSRF token is not defined')
+    if (this.cookies === undefined) throw new Error('cookies are not defined')
+
     await fetch(URLS.AUTH, {
       body: new URLSearchParams({
         action: 'login',
@@ -38,22 +38,25 @@ export class Dune {
       headers: {
         ...HEADERS,
         'Content-Type': 'application/x-www-form-urlencoded',
-        cookie: this.cookies.serialize(),
+        cookie: this.cookies.toString(),
       },
       method: 'POST',
       redirect: 'manual',
     }).then((res) => {
-      this.cookies.parse(res)
+      this.cookies = new Cookies(res)
     })
   }
 
   private async getAuthToken() {
+    if (this.cookies === undefined) throw new Error('cookies are not defined')
+
     const response = await fetch(URLS.SESSION, {
       headers: {
         ...HEADERS,
-        cookie: this.cookies.serialize(),
-        method: 'POST',
+        'Content-Type': 'application/json',
+        cookie: this.cookies.toString(),
       },
+      method: 'POST',
     })
 
     const { token } = await response.json()

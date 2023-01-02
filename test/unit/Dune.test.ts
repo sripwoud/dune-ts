@@ -1,6 +1,7 @@
 import { Dune } from 'src'
 import { URLS } from 'src/constants'
-import { COOKIES, CSRF_TOKEN, TOKEN } from './fixtures'
+import { Cookies } from 'src/Cookies'
+import { COOKIES_STR, CSRF_COOKIE, CSRF_TOKEN, TOKEN } from './fixtures'
 
 let dune: Dune
 
@@ -32,44 +33,65 @@ describe('Dune', () => {
 
   describe('getCsrfToken', () => {
     it('sets csrf cookie', async () => {
-      fetchMock.once('', { headers: { 'set-cookie': `csrf=${CSRF_TOKEN}` } })
+      fetchMock.once(JSON.stringify({ csrf: CSRF_TOKEN }), {
+        headers: { 'set-cookie': CSRF_COOKIE },
+      })
+      dune['cookies'] = new Cookies(
+        new Response('', { headers: { 'set-cookie': '' } }),
+      )
 
       // using array notation to access private methods
       await dune['getCsrfToken']()
 
-      expect(dune.csrf).toEqual(CSRF_TOKEN)
+      expect(dune['cookies'].toString()).toEqual(CSRF_COOKIE)
+      expect(dune).toHaveProperty('csrf', CSRF_TOKEN)
       expect(fetchMock).toHaveBeenCalledOnceWith(URLS.CSRF)
-    })
-
-    it('throws error if csrf token is not found', async () => {
-      fetchMock.once('', { headers: {} })
-
-      await expect(dune['getCsrfToken']()).rejects.toMatchInlineSnapshot(
-        `[Error: No cookies found on response]`,
-      )
     })
   })
 
-  describe('auth', () => {
+  describe('getAuthCookies', () => {
     it('sets cookies', async () => {
       fetchMock.once('', {
         headers: {
-          'set-cookie': Object.entries(COOKIES)
-            .map(([k, v]) => `${k}=${v}`)
-            .join(';'),
+          'set-cookie': COOKIES_STR,
         },
       })
+      dune['csrf'] = CSRF_TOKEN
+      dune['cookies'] = new Cookies(
+        new Response('', { headers: { 'set-cookie': '' } }),
+      )
 
       await dune['getAuthCookies']()
 
-      Object.entries(COOKIES).forEach(([cookieName, cookieValue]) => {
-        expect(dune['cookies'].getCookie(cookieName)).toEqual(cookieValue)
-      })
+      expect(dune['cookies'].toString()).toEqual(COOKIES_STR)
       expect(fetchMock).toHaveBeenCalledOnceWith(URLS.AUTH)
     })
 
-    it('throws error if cookies are not found', async () => {
+    it('throws error if csrf prop not set', async () => {
+      dune['cookies'] = new Cookies(
+        new Response('', { headers: { 'set-cookie': '' } }),
+      )
+      await expect(dune['getAuthCookies']()).rejects.toMatchInlineSnapshot(
+        `[Error: CSRF token is not defined]`,
+      )
+      expect(fetchMock).not.toHaveBeenCalled()
+    })
+
+    it('throws error if csrf cookie not set', async () => {
+      dune['csrf'] = CSRF_TOKEN
+      await expect(dune['getAuthCookies']()).rejects.toMatchInlineSnapshot(
+        `[Error: cookies are not defined]`,
+      )
+      expect(fetchMock).not.toHaveBeenCalled()
+    })
+
+    it('throws error if auth cookies are not found', async () => {
+      dune['csrf'] = CSRF_TOKEN
+      dune['cookies'] = new Cookies(
+        new Response('', { headers: { 'set-cookie': '' } }),
+      )
       fetchMock.once('', { headers: {} })
+
       await expect(dune['getAuthCookies']()).rejects.toMatchInlineSnapshot(
         `[Error: No cookies found on response]`,
       )
@@ -78,6 +100,9 @@ describe('Dune', () => {
 
   describe('getAuthToken', () => {
     it('sets token', async () => {
+      dune['cookies'] = new Cookies(
+        new Response('', { headers: { 'set-cookie': '' } }),
+      )
       fetchMock.once(JSON.stringify({ token: TOKEN }))
 
       await dune['getAuthToken']()
@@ -90,13 +115,11 @@ describe('Dune', () => {
   describe('login', () => {
     it('logs in', async () => {
       fetchMock
-        .once('', { headers: { 'set-cookie': `csrf=1234` } })
+        .once(JSON.stringify({ csrf: CSRF_TOKEN }), {
+          headers: { 'set-cookie': CSRF_COOKIE },
+        })
         .once('', {
-          headers: {
-            'set-cookie': Object.entries(COOKIES)
-              .map(([k, v]) => `${k}=${v}`)
-              .join(';'),
-          },
+          headers: { 'set-cookie': COOKIES_STR },
         })
         .once(JSON.stringify({ token: TOKEN }))
 
