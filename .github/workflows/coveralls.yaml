@@ -44,6 +44,9 @@ jobs:
         run: pnpm i --ignore-scripts --reporter=silent
 
       - name: Test
+        env:
+          DUNE_PWD: ${{ secrets.DUNE_PWD }}
+          DUNE_USER: ${{ secrets.DUNE_USER }}
         run: pnpm run nps t.ci
 
       - name: Coveralls
