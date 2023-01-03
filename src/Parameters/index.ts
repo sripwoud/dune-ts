@@ -1,35 +1,36 @@
 import {
   DatetimeParameter,
-  ListParameter,
   NumberParameter,
   ParameterData,
   ParameterType,
   TextParameter,
 } from './Parameter'
 
+export type ParametersData = Array<{
+  key: string
+  type: ParameterType
+  value: string | Date
+}>
+
 export class Parameters {
-  static create(
-    parameters: Array<
-      | ParameterData<ParameterType.Number, number>
-      | ParameterData<ParameterType.List, string>
-      | ParameterData<ParameterType.Text, string>
-      | ParameterData<ParameterType.Datetime, Date>
-    >,
-  ) {
+  static create(parameters: ParametersData) {
     return parameters.map((parameterData) => {
       let parameter
       switch (parameterData.type) {
         case ParameterType.Datetime:
-          parameter = new DatetimeParameter(parameterData)
-          break
-        case ParameterType.List:
-          parameter = new ListParameter(parameterData)
+          parameter = new DatetimeParameter(
+            parameterData as ParameterData<ParameterType.Datetime, Date>,
+          )
           break
         case ParameterType.Number:
-          parameter = new NumberParameter(parameterData)
+          parameter = new NumberParameter(
+            parameterData as ParameterData<ParameterType.Number, string>,
+          )
           break
         case ParameterType.Text:
-          parameter = new TextParameter(parameterData)
+          parameter = new TextParameter(
+            parameterData as ParameterData<ParameterType.Text, string>,
+          )
       }
 
       return parameter.toObject()
