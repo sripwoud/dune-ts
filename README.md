@@ -1,11 +1,12 @@
 # Dune TS
 
+![npm](https://img.shields.io/npm/v/dune-ts) ![npm bundle size](https://img.shields.io/bundlephobia/min/dune-ts)  
 [![Linter Badge](https://img.shields.io/badge/linter-eslint-8080f2?style=flat-square&logo=eslint)](https://eslint.org)
 [![Formatter Badge](https://img.shields.io/badge/formatter-prettier-f8bc45?style=flat-square&logo=prettier)](https://prettier.io)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![nps friendly](https://img.shields.io/badge/nps-friendly-blue.svg?style=flat-square)](https://github.com/sezna/nps)  
 [![Coverage Status](https://coveralls.io/repos/github/r1oga/dune-ts/badge.svg?branch=main)](https://coveralls.io/github/r1oga/dune-ts?branch=main)
-![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/r1oga/dune-ts/code-quality.yaml?label=Code%20Quality)  
+![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/r1oga/dune-ts/code-quality.yaml?label=code%20quality)  
 ![License Badge](https://img.shields.io/github/license/r1oga/dune-ts)
 
 Work in Progress.  
@@ -27,7 +28,9 @@ This library aims to provide an alternative way to integrate Dune Analytics into
 ## Installation
 
 ```commandline
-pnpm install dune-ts
+pnpm add dune-ts
+yarn add dune-ts
+npm install dune-ts
 ```
 
 ### Setup
