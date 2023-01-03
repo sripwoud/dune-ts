@@ -1,5 +1,6 @@
 # Dune TS
 
+![npm](https://img.shields.io/npm/v/dune-ts) ![npm bundle size](https://img.shields.io/bundlephobia/min/dune-ts)  
 [![Linter Badge](https://img.shields.io/badge/linter-eslint-8080f2?style=flat-square&logo=eslint)](https://eslint.org)
 [![Formatter Badge](https://img.shields.io/badge/formatter-prettier-f8bc45?style=flat-square&logo=prettier)](https://prettier.io)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
@@ -27,7 +28,9 @@ This library aims to provide an alternative way to integrate Dune Analytics into
 ## Installation
 
 ```commandline
-pnpm install dune-ts
+pnpm add dune-ts
+yarn add dune-ts
+npm install dune-ts
 ```
 
 ### Setup
