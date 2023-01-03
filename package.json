@@ -2,8 +2,13 @@
   "name": "dune-ts",
   "version": "1.0.0",
   "description": "Unofficial Dune Analytics Typescript Client",
-  "main": "index.js",
   "repository": "git@github.com:r1oga/dune-ts.git",
+  "author": {
+    "name": "r1oga",
+    "email": "me@r1oga.io",
+    "url": "https://r1oga.io"
+  },
+  "license": "MIT",
   "homepage": "https://github.com/r1oga/dune-ts",
   "keywords": [
     "dune",
@@ -19,14 +24,27 @@
     "prepare": "husky install",
     "setup": "pnpm 2> /dev/null || npm i -g pnpm && pnpm i"
   },
-  "author": "r1oga",
-  "license": "MIT",
+  "files": ["dist/**/*"],
+  "main": "./dist/cjs/index.js",
+  "types": "./dist/cjs/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/types/index.d.ts",
+        "default": "./dist/esm/index.mjs"
+      },
+      "require": {
+        "types": "./dist/cjs/types/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    }
+  },
   "devDependencies": {
     "@r1oga/eslint-config": "^1.1.6",
     "@r1oga/prettier-config": "^1.1.8",
     "@types/jest": "^29.2.3",
-    "@types/js-yaml": "^4.0.5",
     "@types/node": "^18.11.18",
+    "@types/node-fetch": "^2.6.2",
     "@types/yargs": "^17.0.18",
     "concurrently": "^7.6.0",
     "husky": "^8.0.2",
@@ -48,11 +66,8 @@
     "typescript": "^4.9.4",
     "yargs": "^17.6.2"
   },
-  "dependencies": {
-    "js-yaml": "^4.1.0"
-  },
   "engines": {
-    "node": ">=19"
+    "node": ">=18"
   },
   "jest-runner-eslint": {
     "cliOptions": {

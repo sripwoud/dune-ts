@@ -1,18 +1,17 @@
 scripts:
-  barrels:
-    script: barrelsby --config .barrelsby.json
-    hiddenFromHelp: true
-
   build:
-    script: nps clean barrels compile
-    description: Build project
+    default:
+      script: nps clean build.esm build.cjs
+      description: Build project
+    esm:
+      script: tsc -p tsconfig.esm.json && mv dist/esm/index.js dist/esm/index.mjs
+      hiddenFromHelp: true
+    cjs:
+      script: tsc -p tsconfig.cjs.json
+      hiddenFromHelp: true
 
   clean:
     script: rm -rf dist
-    hiddenFromHelp: true
-
-  compile:
-    script: tsc -p tsconfig.compile.json
     hiddenFromHelp: true
 
   fix:
@@ -38,7 +37,18 @@ scripts:
 
   precommit:
     script: tsc && lint-staged
-    #    script: tsc && nps barrels && lint-staged
+    hiddenFromHelp: true
+
+  prepack:
+    script: nps build
+    hiddenFromHelp: true
+
+  publish:
+    script: pn publish
+    description: Publish package
+
+  postpublish:
+    script: bash ./postpublish.sh
     hiddenFromHelp: true
 
   test:
