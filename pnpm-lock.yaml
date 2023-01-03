@@ -4,7 +4,6 @@ specifiers:
   '@r1oga/eslint-config': ^1.1.6
   '@r1oga/prettier-config': ^1.1.8
   '@types/jest': ^29.2.3
-  '@types/js-yaml': ^4.0.5
   '@types/node': ^18.11.18
   '@types/yargs': ^17.0.18
   concurrently: ^7.6.0
@@ -18,7 +17,6 @@ specifiers:
   jest-silent-reporter: ^0.5.0
   jest-watch-select-projects: ^2.0.0
   jest-watch-typeahead: ^2.2.1
-  js-yaml: ^4.1.0
   lint-staged: ^13.1.0
   nps: ^5.10.0
   reflect-metadata: ^0.1.13
@@ -28,14 +26,10 @@ specifiers:
   typescript: ^4.9.4
   yargs: ^17.6.2
 
-dependencies:
-  js-yaml: 4.1.0
-
 devDependencies:
   '@r1oga/eslint-config': 1.1.6_bh7fyjwf3qvjuxqkkpsm2qjvfa
   '@r1oga/prettier-config': 1.1.8_prettier@2.8.1
   '@types/jest': 29.2.3
-  '@types/js-yaml': 4.0.5
   '@types/node': 18.11.18
   '@types/yargs': 17.0.18
   concurrently: 7.6.0
@@ -988,10 +982,6 @@ packages:
       pretty-format: 29.3.1
     dev: true
 
-  /@types/js-yaml/4.0.5:
-    resolution: {integrity: sha512-FhpRzf927MNQdRZP0J5DLIdTXhjLYzeUTmLAu69mnVksLH9CJY3IuSeEgbKUki7GQZm0WqDkGzyxju2EZGD2wA==}
-    dev: true
-
   /@types/json-schema/7.0.11:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
     dev: true
@@ -1398,6 +1388,7 @@ packages:
 
   /argparse/2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
+    dev: true
 
   /array-includes/3.1.6:
     resolution: {integrity: sha512-sgTbLvL6cNnw24FnbaDyjmvddQ2ML8arZsgaJhoABMoplz/4QRhtrYS+alr1BUM1Bwp6dhx8vVCBSLG+StwOFw==}
@@ -3939,6 +3930,7 @@ packages:
     hasBin: true
     dependencies:
       argparse: 2.0.1
+    dev: true
 
   /jsdom/16.7.0:
     resolution: {integrity: sha512-u9Smc2G1USStM+s/x1ru5Sxrl6mPYCbByG1U/hUmqaVsm4tbNyS7CicOSRyuGQYZhTu0h84qkZZQ/I+dzizSVw==}
