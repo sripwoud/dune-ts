@@ -1,6 +1,6 @@
 {
   "name": "dune-ts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Unofficial Dune Analytics Typescript Client",
   "repository": "git@github.com:r1oga/dune-ts.git",
   "author": {
@@ -21,6 +21,7 @@
   ],
   "scripts": {
     "nps": "nps",
+    "postpublish": "bash ./postpublish.sh",
     "prepare": "husky install",
     "setup": "pnpm 2> /dev/null || npm i -g pnpm && pnpm i"
   },
