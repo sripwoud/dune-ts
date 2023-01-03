@@ -6,34 +6,35 @@ import {
   TextParameter,
 } from './Parameter'
 
-export type ParametersData = Array<{
-  key: string
-  type: ParameterType
-  value: string | Date
-}>
+export type ParameterDatas = Array<ParameterData & { type: unknown }>
+
+const validate = (parameterDatas: ParameterDatas) => {
+  parameterDatas.forEach((parameterData, index) => {
+    if (
+      !(
+        parameterData.type === ParameterType.Datetime ||
+        parameterData.type === ParameterType.Number ||
+        parameterData.type === ParameterType.Text
+      )
+    )
+      throw new Error(
+        `Expecting 'type' to be 'datetime', 'number' or 'text (parameter at index ${index})`,
+      )
+  })
+}
+
+const PARAMS = {
+  [ParameterType.Datetime]: DatetimeParameter,
+  [ParameterType.Number]: NumberParameter,
+  [ParameterType.Text]: TextParameter,
+}
 
 export class Parameters {
-  static create(parameters: ParametersData) {
-    return parameters.map((parameterData) => {
-      let parameter
-      switch (parameterData.type) {
-        case ParameterType.Datetime:
-          parameter = new DatetimeParameter(
-            parameterData as ParameterData<ParameterType.Datetime, Date>,
-          )
-          break
-        case ParameterType.Number:
-          parameter = new NumberParameter(
-            parameterData as ParameterData<ParameterType.Number, string>,
-          )
-          break
-        case ParameterType.Text:
-          parameter = new TextParameter(
-            parameterData as ParameterData<ParameterType.Text, string>,
-          )
-      }
+  static create(parameterDatas: ParameterDatas) {
+    validate(parameterDatas)
 
-      return parameter.toObject()
+    return parameterDatas.map(({ key, type, value }) => {
+      return new PARAMS[type as ParameterType]({ key, value }).toObject()
     })
   }
 }

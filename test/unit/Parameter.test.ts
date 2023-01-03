@@ -1,13 +1,12 @@
 import {
   DatetimeParameter,
   NumberParameter,
-  ParameterData,
   ParameterType,
   TextParameter,
 } from 'src/Parameters/Parameter'
 
 describe('NumberParameter', () => {
-  const PARAMETER_DATA: ParameterData<ParameterType.Number, string> = {
+  const PARAMETER_DATA = {
     key: 'amount',
     type: ParameterType.Number,
     value: '100000000000000000000',
@@ -28,7 +27,7 @@ describe('NumberParameter', () => {
 })
 
 describe('TextParameter', () => {
-  const PARAMETER_DATA: ParameterData<ParameterType.Text, string> = {
+  const PARAMETER_DATA = {
     key: 'tokenAddress',
     type: ParameterType.Text,
     value: '"0xc18360217d8f7ab5e7c516566761ea12ce7f9d72"',
@@ -49,7 +48,7 @@ describe('TextParameter', () => {
 })
 
 describe('DatetimeParameter', () => {
-  const PARAMETER_DATA: ParameterData<ParameterType.Datetime, Date> = {
+  const PARAMETER_DATA = {
     key: 'createdAt',
     type: ParameterType.Datetime,
     value: new Date('3/1/23'),

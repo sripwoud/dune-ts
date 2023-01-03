@@ -4,27 +4,55 @@ export enum ParameterType {
   Text = 'text',
 }
 
-export interface ParameterData<T, U> {
-  key: string
-  type: T
-  value: U
+export interface ParameterData {
+  key: unknown
+  value: unknown
 }
 
-export abstract class Parameter<T, U> {
+export abstract class Parameter {
   protected readonly key: string
-  protected readonly type: T
-  protected readonly value: U
+  abstract readonly type: string
+  protected readonly value: unknown
 
-  constructor({ key, type, value }: ParameterData<T, U>) {
-    this.key = key
-    this.type = type
-    this.value = value
+  constructor(parameterData: ParameterData) {
+    this.validate(parameterData)
+    this.key = parameterData.key as string
+    this.value = parameterData.value
+  }
+
+  protected validateKeys(parameterData: ParameterData): void {
+    ;['key', 'value'].forEach((key) => {
+      if (parameterData[key as keyof ParameterData] === undefined)
+        throw new Error(`Missing parameter prop ${key}`)
+    })
+  }
+
+  protected isString(
+    parameterData: ParameterData,
+    propName: keyof ParameterData,
+  ) {
+    if (typeof parameterData[propName] !== 'string')
+      throw new Error(`Expecting '${propName}' prop to be of type 'string'`)
+  }
+
+  protected validate(parameterData: ParameterData): void {
+    this.validateKeys(parameterData)
+    this.isString(parameterData, 'key')
   }
 
   abstract toObject(): Record<string, string>
 }
 
-export class NumberParameter extends Parameter<ParameterType.Number, string> {
+export class NumberParameter extends Parameter {
+  type = ParameterType.Number
+
+  declare value: string
+
+  validate(parameterData: ParameterData): void {
+    super.validate(parameterData)
+    this.isString(parameterData, 'value')
+  }
+
   toObject() {
     return {
       key: this.key,
@@ -34,7 +62,19 @@ export class NumberParameter extends Parameter<ParameterType.Number, string> {
   }
 }
 
-export class DatetimeParameter extends Parameter<ParameterType.Datetime, Date> {
+export class DatetimeParameter extends Parameter {
+  type = ParameterType.Datetime
+
+  declare value: Date
+
+  validate(parameterData: ParameterData): void {
+    super.validate(parameterData)
+    if (!(parameterData.value instanceof Date))
+      throw new Error(
+        `Expecting 'value' prop to be Date instance for Datetime parameters`,
+      )
+  }
+
   toObject() {
     return {
       key: this.key,
@@ -44,23 +84,21 @@ export class DatetimeParameter extends Parameter<ParameterType.Datetime, Date> {
   }
 }
 
-export class TextParameter extends Parameter<ParameterType.Text, string> {
+export class TextParameter extends Parameter {
+  type = ParameterType.Text
+
+  declare value: string
+
+  validate(parameterData: ParameterData): void {
+    super.validate(parameterData)
+    this.isString(parameterData, 'value')
+  }
+
   toObject() {
     return {
       key: this.key,
       type: this.type,
-      value: this.value,
+      value: this.value.startsWith('0x') ? `'"${this.value}"'` : this.value,
     }
   }
 }
-
-// export class ListParameter extends Parameter<ParameterType.List, string> {
-//   toObject() {
-//     return {
-//       enumOptions: this.enumOptions,
-//       key: this.key,
-//       type: this.type,
-//       value: this.value,
-//     }
-//   }
-// }
