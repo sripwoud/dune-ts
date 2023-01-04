@@ -77,11 +77,15 @@ export class DatetimeParameter extends Parameter<Date> {
       )
   }
 
+  serializeDate(date: Date) {
+    return date.toISOString().replace('T', ' ').slice(0, -5)
+  }
+
   toObject() {
     return {
       key: this.key,
       type: this.type,
-      value: this.value.toISOString(),
+      value: this.serializeDate(this.value),
     }
   }
 }
