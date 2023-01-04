@@ -140,14 +140,14 @@ describe('DatetimeParameter', () => {
   })
 
   it('serializes date', () => {
-    const date = new Date('2020/01/01')
-    expect(parameter.serializeDate(date)).toEqual('2019-12-31 23:00:00')
+    const date = new Date('2020/01/01 23:43:12')
+    expect(parameter.serializeDate(date)).toEqual('2020-01-01 23:43:12')
   })
 
   it('toObject returns parameters object with right types', () => {
     expect(parameter.toObject()).toEqual({
       ...PARAMETER_DATA,
-      value: '2023-02-28 23:00:00',
+      value: '2023-03-01 00:00:00',
     })
   })
 

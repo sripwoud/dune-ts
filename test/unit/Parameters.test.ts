@@ -33,7 +33,7 @@ describe('Parameters', () => {
     })
     expect(parameters[2].key).toEqual(PARAMETERS_DATA[2].key)
     expect(parameters[2].type).toEqual(PARAMETERS_DATA[2].type)
-    expect(parameters[2].value).toEqual('2023-02-28 23:00:00')
+    expect(parameters[2].value).toEqual('2023-03-01 00:00:00')
   })
 
   it('throws if constructor with wrong "type" prop value', () => {
