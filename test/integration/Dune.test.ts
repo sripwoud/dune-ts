@@ -1,4 +1,7 @@
 import { Dune } from 'src'
+import { isEthereumAddress } from 'src/utils'
+
+jest.setTimeout(30_000)
 
 let dune: Dune
 
@@ -15,14 +18,32 @@ describe('Dune', () => {
   })
 
   it('getQueryResultId', async () => {
-    await dune['getExecutionId'](1517285)
+    await dune['executeQuery'](1517285)
     expect(dune.executionId).toBeString().not.toBeEmpty()
   })
 
-  it('query', async () => {
-    const { columns, data } = await dune.query(1517285)
+  it('can execute a query without parameters', async () => {
+    const { columns, data } = await dune.query(1843270)
 
     expect(columns).toEqual(['address'])
-    expect(data).toBeArray().not.toBeEmpty()
+    expect(data).toBeArrayOfSize(1)
+    expect(data[0].address).toStartWith('0x')
+  })
+
+  it('can execute a query with parameters', async () => {
+    const PARAMETER_DATAS = [
+      { key: 'min', type: 'number', value: '0' },
+      {
+        key: 'tokenAddress',
+        type: 'text',
+        value: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
+      },
+    ]
+    const { columns, data } = await dune.query(1843233, PARAMETER_DATAS)
+
+    expect(columns).toEqual(['address', 'token_address'])
+    expect(data).toBeArrayOfSize(1)
+    expect(isEthereumAddress(data[0].address)).toBeTrue()
+    expect(data[0].token_address).toEqual(PARAMETER_DATAS[1].value)
   })
 })
