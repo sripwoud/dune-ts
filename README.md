@@ -49,15 +49,14 @@ Fetch Query Results: `nps "query -q <query-id> -u <username> -p <password>"`
 import { Dune } from 'dune-ts'
 
 const dune = new Dune({ password, username })
+
 await dune.login()
+
 const { columns, data } = await dune.query(queryId, [
   { key: 'key', value: 'value', type: 'text' },
 ])
 ```
 
-```
-
 ## Credits
 
 Based on [itzmestar/duneanalytics](https://github.com/itzmestar/duneanalytics)
-```
