@@ -4,38 +4,38 @@ export enum ParameterType {
   Text = 'text',
 }
 
-export interface ParameterData {
-  key: unknown
-  value: unknown
+export interface ParameterData<T> {
+  key: string
+  value: T
 }
 
-export abstract class Parameter {
+export abstract class Parameter<T> {
   protected readonly key: string
   abstract readonly type: string
-  protected readonly value: unknown
+  protected readonly value: T
 
-  constructor(parameterData: ParameterData) {
+  constructor(parameterData: ParameterData<T>) {
     this.validate(parameterData)
-    this.key = parameterData.key as string
+    this.key = parameterData.key
     this.value = parameterData.value
   }
 
-  protected validateKeys(parameterData: ParameterData): void {
+  protected validateKeys(parameterData: ParameterData<T>): void {
     ;['key', 'value'].forEach((key) => {
-      if (parameterData[key as keyof ParameterData] === undefined)
-        throw new Error(`Missing parameter prop ${key}`)
+      if (parameterData[key as keyof ParameterData<T>] === undefined)
+        throw new Error(`Missing parameter prop '${key}'`)
     })
   }
 
   protected isString(
-    parameterData: ParameterData,
-    propName: keyof ParameterData,
+    parameterData: ParameterData<T>,
+    propName: keyof ParameterData<T>,
   ) {
     if (typeof parameterData[propName] !== 'string')
       throw new Error(`Expecting '${propName}' prop to be of type 'string'`)
   }
 
-  protected validate(parameterData: ParameterData): void {
+  protected validate(parameterData: ParameterData<T>): void {
     this.validateKeys(parameterData)
     this.isString(parameterData, 'key')
   }
@@ -43,12 +43,12 @@ export abstract class Parameter {
   abstract toObject(): Record<string, string>
 }
 
-export class NumberParameter extends Parameter {
+export class NumberParameter extends Parameter<string> {
   type = ParameterType.Number
 
   declare value: string
 
-  validate(parameterData: ParameterData): void {
+  validate(parameterData: ParameterData<string>): void {
     super.validate(parameterData)
     this.isString(parameterData, 'value')
   }
@@ -62,12 +62,12 @@ export class NumberParameter extends Parameter {
   }
 }
 
-export class DatetimeParameter extends Parameter {
+export class DatetimeParameter extends Parameter<Date> {
   type = ParameterType.Datetime
 
   declare value: Date
 
-  validate(parameterData: ParameterData): void {
+  validate(parameterData: ParameterData<Date>): void {
     super.validate(parameterData)
     if (!(parameterData.value instanceof Date))
       throw new Error(
@@ -84,12 +84,12 @@ export class DatetimeParameter extends Parameter {
   }
 }
 
-export class TextParameter extends Parameter {
+export class TextParameter extends Parameter<string> {
   type = ParameterType.Text
 
   declare value: string
 
-  validate(parameterData: ParameterData): void {
+  validate(parameterData: ParameterData<string>): void {
     super.validate(parameterData)
     this.isString(parameterData, 'value')
   }

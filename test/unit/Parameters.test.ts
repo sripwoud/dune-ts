@@ -32,4 +32,20 @@ describe('Parameters', () => {
     // @ts-expect-error
     expect(parameters[2].value).toEqual(PARAMETERS_DATA[2].value.toISOString())
   })
+
+  it('throws if constructor with wrong "type" prop value', () => {
+    ;['foo', 1, null, undefined].forEach((type) => {
+      expect(() =>
+        Parameters.create([
+          {
+            key: 'amount',
+            type,
+            value: '100000000000000000000',
+          },
+        ]),
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"Expecting 'type' to be 'datetime', 'number' or 'text (parameter at index 0)"`,
+      )
+    })
+  })
 })

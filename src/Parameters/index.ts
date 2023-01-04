@@ -6,7 +6,9 @@ import {
   TextParameter,
 } from './Parameter'
 
-export type ParameterDatas = Array<ParameterData & { type: unknown }>
+export type ParameterDatas = Array<
+  ParameterData<string | Date> & { type: unknown }
+>
 
 const validate = (parameterDatas: ParameterDatas) => {
   parameterDatas.forEach((parameterData, index) => {
@@ -34,6 +36,7 @@ export class Parameters {
     validate(parameterDatas)
 
     return parameterDatas.map(({ key, type, value }) => {
+      // @ts-expect-error
       return new PARAMS[type as ParameterType]({ key, value }).toObject()
     })
   }
