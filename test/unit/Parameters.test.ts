@@ -2,6 +2,10 @@ import { Parameters } from 'src/Parameters'
 import { ParameterType } from 'src/Parameters/Parameter'
 
 describe('Parameters', () => {
+  it('returns an empty array if parameterDatas is undefined', () => {
+    expect(Parameters.create()).toEqual([])
+  })
+
   it('create list of object parameters with right types', () => {
     const PARAMETERS_DATA = [
       {
@@ -34,15 +38,18 @@ describe('Parameters', () => {
   })
 
   it('throws if constructor with wrong "type" prop value', () => {
-    ;['foo', 1, null, undefined].forEach((type) => {
+    ;[
+      ...['foo', 1, null, undefined].map((type) => ({
+        key: 'amount',
+        type,
+        value: '123',
+      })),
+      'wrong',
+      { key: 'amount' },
+    ].forEach((data) => {
       expect(() =>
-        Parameters.create([
-          {
-            key: 'amount',
-            type,
-            value: '100000000000000000000',
-          },
-        ]),
+        // @ts-expect-error
+        Parameters.create([data]),
       ).toThrowErrorMatchingInlineSnapshot(
         `"Expecting 'type' to be 'datetime', 'number' or 'text (parameter at index 0)"`,
       )

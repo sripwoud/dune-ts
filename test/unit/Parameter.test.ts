@@ -9,7 +9,7 @@ describe('Parameter', () => {
   describe('constructor', () => {
     it('should throw and error if key is missing', () => {
       expect(
-        // @ts-expect-error
+        // @ts-expect-error - force wrong type in case used in non ts project
         () => new DatetimeParameter({ value: new Date() }),
       ).toThrowErrorMatchingInlineSnapshot(`"Missing parameter prop 'key'"`)
       expect(
@@ -87,7 +87,7 @@ describe('NumberParameter', () => {
     expect(parameter.toObject()).toEqual(PARAMETER_DATA)
   })
 
-  it('throws if not constructed with value of type string', () => {
+  it('throws if not constructed with "value" prop of type string', () => {
     expect(
       // @ts-expect-error
       () => new NumberParameter({ ...PARAMETER_DATA, value: 1 }),
@@ -115,7 +115,7 @@ describe('TextParameter', () => {
     expect(parameter.toObject()).toEqual(PARAMETER_DATA)
   })
 
-  it('throws if not constructed with value of type string', () => {
+  it('throws if not constructed with "value" prop of type string', () => {
     expect(
       // @ts-expect-error
       () => new TextParameter({ ...PARAMETER_DATA, value: 1 }),
@@ -146,7 +146,7 @@ describe('DatetimeParameter', () => {
     })
   })
 
-  it('throw if not constructed with value that is not a Date instance', () => {
+  it('throws if not constructed with "value" prop that is not a Date instance', () => {
     expect(
       // @ts-expect-error
       () => new DatetimeParameter({ ...PARAMETER_DATA, value: 1 }),
