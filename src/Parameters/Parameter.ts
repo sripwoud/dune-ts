@@ -1,3 +1,5 @@
+import { isEthereumAddress } from '../utils'
+
 export enum ParameterType {
   Datetime = 'datetime',
   Number = 'number',
@@ -98,7 +100,9 @@ export class TextParameter extends Parameter<string> {
     return {
       key: this.key,
       type: this.type,
-      value: this.value.startsWith('0x') ? `'"${this.value}"'` : this.value,
+      value: isEthereumAddress(this.value)
+        ? `"${this.value.toLowerCase()}"`
+        : this.value,
     }
   }
 }
