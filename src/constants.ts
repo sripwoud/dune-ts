@@ -22,22 +22,19 @@ export const URLS = {
 
 export const COOKIES_RGX = /(csrf|auth(-\w+)+)=([\w-.]+)/g
 
-const GET_RESULT_GQL = `query GetResult($query_id: Int!, $parameters: [Parameter!]!) {
-    get_result_v3(query_id: $query_id, parameters: $parameters) {
+const EXECUTE_QUERY_GQL = `mutation ExecuteQuery($query_id: Int!, $parameters: [Parameter!]!) {
+    execute_query_v2(query_id: $query_id, parameters: $parameters) {
         job_id
-        result_id
-        error_id
-        __typename
     }
 }`
-export const GET_EXECUTION_ID_DATA = {
-  operationName: 'GetResult',
-  query: GET_RESULT_GQL,
+export const EXECUTE_QUERY_BODY = {
+  operationName: 'ExecuteQuery',
+  query: EXECUTE_QUERY_GQL,
 }
 
 const GET_EXECUTION_GQL =
-  'query GetExecution($execution_id: String!, $query_id: Int!, $parameters: [Parameter!]!) {\n  get_execution(\n    execution_id: $execution_id\n    query_id: $query_id\n    parameters: $parameters\n  ) {\n      execution_succeeded {\n        execution_id\n        columns\n        data\n      }\n    }\n}\n'
-export const QUERY_DATA = {
-  operationName: 'GetExecution',
+  'query GetExecution($execution_id: String!, $query_id: Int!, $parameters: [Parameter!]!) {\n  get_execution(\n    execution_id: $execution_id\n    query_id: $query_id\n    parameters: $parameters\n  ) {\n      execution_succeeded {\n        columns\n        data\n      }\n    }\n}\n'
+export const QUERY_BODY = {
+  operationName: 'ExecuteQuery',
   query: GET_EXECUTION_GQL,
 }

@@ -32,7 +32,9 @@ const PARAMS = {
 }
 
 export class Parameters {
-  static create(parameterDatas: ParameterDatas) {
+  static create(parameterDatas?: ParameterDatas) {
+    if (parameterDatas === undefined) return []
+
     validate(parameterDatas)
 
     return parameterDatas.map(({ key, type, value }) => {
@@ -41,3 +43,5 @@ export class Parameters {
     })
   }
 }
+
+export { ParameterType }
