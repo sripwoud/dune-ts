@@ -3,9 +3,10 @@ import type { JestConfigWithTsJest } from 'ts-jest'
 const jestConfig: JestConfigWithTsJest = {
   collectCoverage: true,
   collectCoverageFrom: [
-    '<rootDir>/src/Cookies.ts',
-    '<rootDir>/src/Dune.ts',
-    '<rootDir>/src/decorators/index.ts',
+    '<rootDir>/src/**/*.ts',
+    '!<rootDir>/src/global.d.ts',
+    '!<rootDir>/src/config.ts',
+    '!<rootDir>/src/utils.ts',
   ],
   coverageDirectory: 'coverage',
   projects: [

@@ -65,10 +65,10 @@ scripts:
       script: jest --config test/jest.config.ts --selectProjects integration --watch --coverage=false
       description: Run only integration tests (watch, no coverage)
     once:
-      script: jest --config test/jest.config.ts
+      script: TZ=UTC jest --config test/jest.config.ts
       description: Run tests (once, coverage)
     unit:
-      script: jest --config test/jest.config.ts --selectProjects unit --watch --coverage=false
+      script: TZ=UTC jest --config test/jest.config.ts --selectProjects unit --watch --coverage=false
       description: Run only unit tests (watch, no coverage)
 
   query:
@@ -80,5 +80,5 @@ scripts:
       script: concurrently tsc 'nps test.once'
       description: Perform static analysis testing (lint, format...)
     ci:
-      script: concurrently tsc 'jest --config test/jest.config.ts --selectProjects prettier lint --silent --reporters=jest-silent-reporter --coverage false'
+      script: concurrently tsc 'TZ=UTC jest --config test/jest.config.ts --selectProjects prettier lint --silent --reporters=jest-silent-reporter --coverage false'
       hiddenFromHelp: true

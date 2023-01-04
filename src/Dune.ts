@@ -1,7 +1,9 @@
+import { ParameterDatas, Parameters } from 'src/Parameters'
 import { config } from './config'
-import { GET_EXECUTION_ID_DATA, HEADERS, QUERY_DATA, URLS } from './constants'
+import { EXECUTE_QUERY_BODY, HEADERS, QUERY_BODY, URLS } from './constants'
 import { Cookies } from './Cookies'
 import { isCookiesPresent, isCsrfPresent, isTokenPresent } from './decorators'
+import { delay } from './utils'
 
 export class Dune {
   private readonly password: string
@@ -72,11 +74,14 @@ export class Dune {
   }
 
   @isTokenPresent
-  private async getExecutionId(queryId: number) {
+  private async executeQuery(
+    queryId: number,
+    parameters: ReturnType<typeof Parameters.create> = [],
+  ) {
     const res = await fetch(URLS.GRAPH_EXEC_ID, {
       body: JSON.stringify({
-        ...GET_EXECUTION_ID_DATA,
-        variables: { parameters: [], query_id: queryId },
+        ...EXECUTE_QUERY_BODY,
+        variables: { parameters, query_id: queryId },
       }),
       headers: {
         ...HEADERS,
@@ -87,31 +92,40 @@ export class Dune {
       method: 'POST',
     })
 
-    this.executionId = (await res.json()).data.get_result_v3.result_id
+    this.executionId = (await res.json()).data.execute_query_v2.job_id
   }
 
-  public async query(queryId: number) {
-    await this.getExecutionId(queryId)
-    const res = await fetch(URLS.GRAPH_QUERY, {
-      body: JSON.stringify({
-        ...QUERY_DATA,
-        variables: {
-          execution_id: this.executionId,
-          parameters: [],
-          query_id: queryId,
-        },
-      }),
-      headers: {
-        ...HEADERS,
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        authorization: `Bearer ${this.token}`,
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-    })
+  public async query(queryId: number, parameterDatas?: ParameterDatas) {
+    const parameters = Parameters.create(parameterDatas)
+    await this.executeQuery(queryId, parameters)
 
-    const { columns, data } = (await res.json()).data.get_execution
-      .execution_succeeded
+    let executionSucceeded: null | { columns: string[]; data: any[] } = null
+
+    while (executionSucceeded === null) {
+      const res = await fetch(URLS.GRAPH_QUERY, {
+        body: JSON.stringify({
+          ...QUERY_BODY,
+          variables: {
+            execution_id: this.executionId,
+            parameters,
+            query_id: queryId,
+          },
+        }),
+        headers: {
+          ...HEADERS,
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          authorization: `Bearer ${this.token}`,
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+      })
+      executionSucceeded = (await res.json()).data.get_execution
+        .execution_succeeded
+
+      await delay(1500)
+    }
+
+    const { columns, data } = executionSucceeded
     return { columns, data }
   }
 }
