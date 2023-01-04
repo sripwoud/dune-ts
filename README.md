@@ -9,7 +9,6 @@
 [![GitHub Code Quality Workflow Status](https://img.shields.io/github/actions/workflow/status/r1oga/dune-ts/code-quality.yaml?label=code%20quality)](https://github.com/r1oga/dune-ts/actions/workflows/code-quality.yaml)  
 [![License Badge](https://img.shields.io/github/license/r1oga/dune-ts)](https://github.com/r1oga/dune-ts/blob/main/LICENSE)
 
-Work in Progress.  
 Unofficial Dune Analytics Typescript Client.
 
 ## Motivation
