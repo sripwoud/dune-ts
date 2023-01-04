@@ -22,8 +22,7 @@ This library aims to provide an alternative way to integrate Dune Analytics into
 ## Features
 
 - [x] Authentication with password and username.
-- [x] Fetch results from Dune Analytics queries without parameters
-- [ ] Fetch results from Dune Analytics queries with parameters
+- [x] Fetch results from Dune Analytics queries with parameters
 
 ## Installation
 
@@ -51,9 +50,14 @@ import { Dune } from 'dune-ts'
 
 const dune = new Dune({ password, username })
 await dune.login()
-const { columns, data } = await dune.query(queryId)
+const { columns, data } = await dune.query(queryId, [
+  { key: 'key', value: 'value', type: 'text' },
+])
+```
+
 ```
 
 ## Credits
 
 Based on [itzmestar/duneanalytics](https://github.com/itzmestar/duneanalytics)
+```
