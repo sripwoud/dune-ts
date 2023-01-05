@@ -6,7 +6,6 @@ const jestConfig: JestConfigWithTsJest = {
     '<rootDir>/src/**/*.ts',
     '!<rootDir>/src/global.d.ts',
     '!<rootDir>/src/config.ts',
-    '!<rootDir>/src/utils.ts',
   ],
   coverageDirectory: 'coverage',
   projects: [
