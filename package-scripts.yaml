@@ -39,18 +39,6 @@ scripts:
     script: tsc && lint-staged
     hiddenFromHelp: true
 
-  prepack:
-    script: nps build
-    hiddenFromHelp: true
-
-  publish:
-    script: pn publish
-    description: Publish package
-
-  postpublish:
-    script: bash ./postpublish.sh
-    hiddenFromHelp: true
-
   test:
     default:
       script: nps 'test.once --watch --coverage=false'
