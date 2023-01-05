@@ -1,4 +1,3 @@
-import { config } from './config'
 import { EXECUTE_QUERY_BODY, HEADERS, QUERY_BODY, URLS } from './constants'
 import { Cookies } from './Cookies'
 import {
@@ -19,11 +18,20 @@ export class Dune {
   public executionId: string | undefined
   private loggedAt: Date | undefined
 
-  constructor({ password, username } = config) {
-    if (password === undefined) throw new Error('Dune password is not defined')
-    if (username === undefined) throw new Error('Dune username is not defined')
+  constructor(credentials: { password?: string; username?: string } = {}) {
+    let { password, username } = credentials
+    password ??= process.env.DUNE_PASSWORD
+    username ??= process.env.DUNE_USERNAME
 
+    Object.entries(credentials).forEach(([key, value]) => {
+      if (typeof value !== 'string')
+        throw new Error(`${key} should be a string`)
+      if (value === '') throw new Error(`${key} should be a non empty string`)
+    })
+
+    // @ts-expect-error
     this.password = password
+    // @ts-expect-error
     this.username = username
     this.cookies = new Cookies()
   }

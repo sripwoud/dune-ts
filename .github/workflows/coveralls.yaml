@@ -45,8 +45,8 @@ jobs:
 
       - name: Test
         env:
-          DUNE_PWD: ${{ secrets.DUNE_PWD }}
-          DUNE_USER: ${{ secrets.DUNE_USER }}
+          DUNE_PASSWORD: ${{ secrets.DUNE_PASSWORD }}
+          DUNE_USER: r1oga
         run: pnpm run nps t.ci
 
       - name: Coveralls
