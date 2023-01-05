@@ -2,7 +2,12 @@ import { ParameterDatas, Parameters } from 'src/Parameters'
 import { config } from './config'
 import { EXECUTE_QUERY_BODY, HEADERS, QUERY_BODY, URLS } from './constants'
 import { Cookies } from './Cookies'
-import { isCookiesPresent, isCsrfPresent, isTokenPresent } from './decorators'
+import {
+  isCookiesPresent,
+  isCsrfPresent,
+  isTokenPresent,
+  maybeLogin,
+} from './decorators'
 import { delay } from './utils'
 
 export class Dune {
@@ -12,6 +17,7 @@ export class Dune {
   private csrf: string | undefined
   private token: string | undefined
   public executionId: string | undefined
+  private loggedAt: Date | undefined
 
   constructor({ password, username } = config) {
     if (password === undefined) throw new Error('Dune password is not defined')
@@ -71,6 +77,7 @@ export class Dune {
     await this.getCsrfToken()
     await this.getAuthCookies()
     await this.getAuthToken()
+    this.loggedAt = new Date()
   }
 
   @isTokenPresent
@@ -95,6 +102,7 @@ export class Dune {
     this.executionId = (await res.json()).data.execute_query_v2.job_id
   }
 
+  @maybeLogin()
   public async query(queryId: number, parameterDatas?: ParameterDatas) {
     const parameters = Parameters.create(parameterDatas)
     await this.executeQuery(queryId, parameters)

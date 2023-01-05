@@ -20,3 +20,6 @@ export const isEthereumAddress = (str: string) => {
 
 export const delay = async (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms))
+
+export const isAfter = (date: Date, pastMs: number) =>
+  new Date().getTime() > date.getTime() + pastMs
