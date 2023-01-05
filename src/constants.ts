@@ -38,3 +38,5 @@ export const QUERY_BODY = {
   operationName: 'ExecuteQuery',
   query: GET_EXECUTION_GQL,
 }
+
+export const MAX_AGE = 360 * 60 * 1_000
