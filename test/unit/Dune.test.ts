@@ -114,6 +114,7 @@ describe('Dune', () => {
         )
       })
       expect(dune).toHaveProperty('token', TOKEN)
+      expect(dune).toHaveProperty('loggedAt', expect.any(Date))
     })
   })
 
@@ -142,6 +143,9 @@ describe('Dune', () => {
 
   describe('query', () => {
     it('returns query results', async () => {
+      const spy = jest.spyOn(dune, 'login').mockImplementationOnce(async () => {
+        dune['token'] = TOKEN
+      })
       fetchMock
         .once(JSON.stringify({ data: { execute_query_v2: { job_id: 1234 } } }))
         .once(
@@ -153,7 +157,6 @@ describe('Dune', () => {
             },
           }),
         )
-      dune['token'] = TOKEN
 
       await expect(dune.query(1)).resolves.toEqual({
         columns: ['COL'],
@@ -169,6 +172,7 @@ describe('Dune', () => {
         URLS.GRAPH_QUERY,
         expect.any(Object),
       )
+      expect(spy).toHaveBeenCalledOnce()
     })
 
     it('accepts parameters', async () => {
@@ -179,7 +183,12 @@ describe('Dune', () => {
           value: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
         },
       ]
+
+      dune['loggedAt'] = new Date()
+      dune['token'] = TOKEN
+
       const spy = jest.spyOn(Parameters, 'create')
+
       fetchMock
         .once(JSON.stringify({ data: { execute_query_v2: { job_id: 1234 } } }))
         .once(
@@ -191,12 +200,12 @@ describe('Dune', () => {
             },
           }),
         )
-      dune['token'] = TOKEN
 
       await expect(dune.query(1, PARAMETERS)).resolves.toEqual({
         columns: ['COL'],
         data: ['DATA'],
       })
+
       expect(fetchMock).toHaveBeenNthCalledWith(
         1,
         URLS.GRAPH_EXEC_ID,
@@ -207,11 +216,20 @@ describe('Dune', () => {
         URLS.GRAPH_QUERY,
         expect.any(Object),
       )
-
       expect(spy).toHaveBeenCalledOnceWith(PARAMETERS)
       expect(spy).toHaveReturnedWith([
         { ...PARAMETERS[0], value: `"${PARAMETERS[0].value}"` },
       ])
+    })
+
+    it("doesn't login if already logged in", async () => {
+      dune['loggedAt'] = new Date()
+      dune['token'] = TOKEN
+      jest.spyOn(dune, 'query').mockResolvedValueOnce({ columns: [], data: [] })
+      const spy = jest.spyOn(dune, 'login')
+
+      await dune.query(1)
+      expect(spy).not.toHaveBeenCalled()
     })
   })
 })
