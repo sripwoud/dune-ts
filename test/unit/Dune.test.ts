@@ -18,16 +18,39 @@ describe('Dune', () => {
       expect(dune).toHaveProperty('username', 'bar')
     })
 
-    it('throws if password is not defined', () => {
-      expect(
-        () => new Dune({ username: 'bar' }),
-      ).toThrowErrorMatchingInlineSnapshot(`"Dune password is not defined"`)
+    it('defaults password and username to env vars', () => {
+      dune = new Dune()
+      expect(dune).toHaveProperty('password', process.env.DUNE_PASSWORD)
+      expect(dune).toHaveProperty('username', process.env.DUNE_USERNAME)
     })
 
-    it('throws if username is not defined', () => {
+    it('throws if password is not a string', () => {
       expect(
-        () => new Dune({ password: 'foo' }),
-      ).toThrowErrorMatchingInlineSnapshot(`"Dune username is not defined"`)
+        // @ts-expect-error
+        () => new Dune({ password: 1, username: 'bar' }),
+      ).toThrowErrorMatchingInlineSnapshot(`"password should be a string"`)
+    })
+
+    it('throws if password is empty string', () => {
+      expect(
+        () => new Dune({ password: '', username: 'bar' }),
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"password should be a non empty string"`,
+      )
+    })
+    it('throws if username is not a string', () => {
+      expect(
+        // @ts-expect-error
+        () => new Dune({ password: '1', username: 1 }),
+      ).toThrowErrorMatchingInlineSnapshot(`"username should be a string"`)
+    })
+
+    it('throws if username is empty string', () => {
+      expect(
+        () => new Dune({ password: 'asd', username: '' }),
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"username should be a non empty string"`,
+      )
     })
   })
 
