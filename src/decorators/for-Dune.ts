@@ -1,6 +1,6 @@
-import { MAX_AGE } from 'src/constants'
-import { Dune } from 'src/Dune'
-import { isAfter } from 'src/utils'
+import { MAX_AGE } from '../constants'
+import { Dune } from '../Dune'
+import { isAfter } from '../utils'
 
 export const maybeLogin = () => {
   return function (

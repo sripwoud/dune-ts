@@ -1,4 +1,4 @@
-import { Dune } from 'src/Dune'
+import { Dune } from '../Dune'
 
 const isPropPresent =
   (prop: 'token' | 'cookies' | 'csrf') =>

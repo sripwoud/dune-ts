@@ -1,4 +1,3 @@
-import { ParameterDatas, Parameters } from 'src/Parameters'
 import { config } from './config'
 import { EXECUTE_QUERY_BODY, HEADERS, QUERY_BODY, URLS } from './constants'
 import { Cookies } from './Cookies'
@@ -8,6 +7,7 @@ import {
   isTokenPresent,
   maybeLogin,
 } from './decorators'
+import { ParameterDatas, Parameters } from './Parameters'
 import { delay } from './utils'
 
 export class Dune {
