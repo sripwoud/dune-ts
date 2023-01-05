@@ -22,6 +22,7 @@
   "scripts": {
     "nps": "nps",
     "postpublish": "bash ./postpublish.sh",
+    "prepack": "nps build",
     "prepare": "husky install",
     "setup": "pnpm 2> /dev/null || npm i -g pnpm && pnpm i"
   },
