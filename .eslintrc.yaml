@@ -1,4 +1,12 @@
 extends: ['@r1oga']
 rules:
+  '@typescript-eslint/ban-ts-comment': off
   '@typescript-eslint/dot-notation': off
   '@typescript-eslint/no-extraneous-class': warn
+overrides:
+  - files: ['example/index.ts', 'src/config.ts']
+    rules:
+      no-console: off
+  - files: ['src/Parameters/index.ts']
+    rules:
+      '@typescript-eslint/no-extraneous-class': off
