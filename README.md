@@ -33,8 +33,8 @@ npm install dune-ts
 
 ### Setup
 
-Fill your credentials in `.config.yaml` or define `DUNE_PWD` and `DUNE_USER` environment variables.  
-See [`config.sample.json`](config.sample.json) for an example.
+Define `DUNE_PASSWORD` and `DUNE_USERNAME` environment variables.  
+Alternatively, you can pass the credentials to the `Dune` constructor.
 
 ## Local Development
 
