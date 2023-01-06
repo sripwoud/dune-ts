@@ -10,7 +10,9 @@ Please describe the tests (manual, unit....) that you ran to verify your changes
 
 # Checklist:
 
-- [ ] My code follows the style guidelines of this project (format/lint) and doesn't break existing tests (`nps validate` is successful)
+- [ ] My code follows the style guidelines of this project (format/lint) and doesn't break existing tests
+  - `nps validate` passed locally
+  - [`Code Quality` GitHub Check](https://github.com/r1oga/dune-ts/actions/workflows/code-quality.yaml) passed
 - [ ] I have performed a self-review of my code
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation
