@@ -58,7 +58,9 @@ const { columns, data } = await dune.query(queryId, [
 
 ## Disclaimer
 This is an experimental library. It'll break as soon as Dune Analytics change their graphql endpoints (URL or parameters).  
-This isn't free of bugs either. [Contributions](./CONTRIBUTING.md) are welcome!
+This isn't free of bugs either. Contributions are welcome!
+
+## [Contribute](https://github.com/r1oga/dune-ts/contribute)
 
 ## Credits
 
