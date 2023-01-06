@@ -42,19 +42,26 @@ Setup: `npm run setup`
 Check available scripts: `nps`  
 Fetch Query Results: `nps "query -q <query-id> -u <username> -p <password>"`
 
-## [Example](./example/index.ts)
+## How To Use
+
+`Dune.query` requires a `queryId` (can be looked up in the URL of the query `https://dune.com/queries/<queryId>`) and accepts an optional array describing your query parameters (that you defined in the online query editor).
+
+- number parameter: `{ key: 'parameterName', value: '123', type: 'number' }`
+- text parameter: `{ key: 'parameterName', value: '123', type: 'text' }`
+- date parameter: `{ key: 'parameterName', value: new Date(), type: 'datetime' }`
+- list parameter: not supported by this lib yet
 
 ```typescript
 import { Dune } from 'dune-ts'
 
 const dune = new Dune({ password, username })
 
-await dune.login()
-
 const { columns, data } = await dune.query(queryId, [
   { key: 'key', value: 'value', type: 'text' },
 ])
 ```
+
+### [Example](./example/index.ts)
 
 ## Disclaimer
 
