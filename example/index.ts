@@ -23,7 +23,6 @@ const argv = yargs(hideBin(process.argv))
 const main = async () => {
   const { password, query, username } = argv
   const dune = new Dune({ password, username })
-  await dune.login()
   return dune.query(query)
 }
 
