@@ -1,6 +1,5 @@
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
-
 import { Dune } from '../src'
 
 const options = {
