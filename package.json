@@ -42,8 +42,8 @@
     }
   },
   "devDependencies": {
-    "@r1oga/eslint-config": "^1.1.6",
-    "@r1oga/prettier-config": "^1.1.8",
+    "@r1oga/eslint-config": "^1.1.8",
+    "@r1oga/prettier-config": "^1.1.11",
     "@types/jest": "^29.2.3",
     "@types/node": "^18.11.18",
     "@types/node-fetch": "^2.6.2",
