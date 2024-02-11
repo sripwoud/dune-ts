@@ -1,6 +1,8 @@
 API Calls are now included in the dune [free tier](https://dune.com/pricing), which makes this library obsolete.  
 You should rather follow the dune [documentation](https://dune.com/docs/api/) to make programmatic calls to the Dune API.
+
 ---
+
 # Dune TS
 
 [![npm](https://img.shields.io/npm/v/dune-ts)](https://www.npmjs.com/package/dune-ts) [![npm bundle size](https://img.shields.io/bundlephobia/min/dune-ts)](https://www.npmjs.com/package/dune-ts)  
