@@ -1,15 +1,15 @@
 {
   "name": "dune-ts",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Unofficial Dune Analytics Typescript Client",
-  "repository": "git@github.com:r1oga/dune-ts.git",
+  "repository": "git@github.com:sripwoud/dune-ts.git",
   "author": {
-    "name": "r1oga",
-    "email": "me@r1oga.io",
-    "url": "https://r1oga.io"
+    "name": "sripwoud",
+    "email": "me@sripwoud.xyz",
+    "url": "https://sripwoud.xyz"
   },
-  "license": "MIT",
-  "homepage": "https://github.com/r1oga/dune-ts",
+  "license": "AGPL-3.0",
+  "homepage": "https://github.com/sripwoud/dune-ts",
   "keywords": [
     "dune",
     "analytics",
